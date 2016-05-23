@@ -19,12 +19,9 @@ import {RouteDefinition} from 'angular2/router';
 
 import Home from './home';
 import SucheKunden from '../kundenverwaltung/component/suche_kunden/suche_kunden';
-import SucheKundebyBestellungId from '../kundenverwaltung/component/suche_kunde_by_bestellungid/suche_kunde_by_bestellungid';
 import DetailsKunde from '../kundenverwaltung/component/details_kunde/details_kunde';
+import CreateKunde from '../kundenverwaltung/component/create_kunde/create_kunde';
 import UpdateKunde from '../kundenverwaltung/component/update_kunde/update_kunde';
-import UpdatePrivatkunde from '../kundenverwaltung/component/update_kunde/update_kunde_privat';
-import CreateMultimedia from '../kundenverwaltung/component/create_multimedia/create_multimedia';
-import SucheMultimedia from '../kundenverwaltung/component/suche_multimedia/suche_multimedia';
 /* tslint:disable:max-line-length */
 import BalkendiagrammBewertungen from '../kundenverwaltung/component/balkendiagramm_bewertungen/balkendiagramm_bewertungen';
 import LiniendiagrammBewertungen from '../kundenverwaltung/component/liniendiagramm_bewertungen/liniendiagramm_bewertungen';
@@ -43,11 +40,6 @@ const APP_ROUTES: any = {
     // home: {path: '/', name: 'Home', component: Home},
     sucheKundenDef:
         {path: '/sucheKunden', name: 'SucheKunden', component: SucheKunden},
-    sucheKundebyBestellungIdDef: {
-        path: '/sucheKundebyBestellungId',
-        name: 'SucheKundebyBestellungId',
-        component: SucheKundebyBestellungId
-    },
     detailsKundeDef: {
         path: '/detailsKunde/:id',
         name: 'DetailsKunde',
@@ -55,11 +47,8 @@ const APP_ROUTES: any = {
     },
     updateKundeDef:
         {path: '/updateKunde/:id', name: 'UpdateKunde', component: UpdateKunde},
-    updatePrivatekundeDef: {
-        path: '/updatePrivatkunde/:id',
-        name: 'UpdatePrivatkunde',
-        component: UpdatePrivatkunde
-    },
+    createKundeDef:
+        {path: '/createKunde', name: 'CreateKunde', component: CreateKunde},
     balkendiagrammDef: {
         path: '/balkendiagramm',
         name: 'Balkendiagramm',
@@ -74,16 +63,6 @@ const APP_ROUTES: any = {
         path: '/tortendiagramm',
         name: 'Tortendiagramm',
         component: TortendiagrammBewertungen
-    },
-    createMultimediaDef: {
-        path: '/createMultimedia',
-        name: 'CreateMultimedia',
-        component: CreateMultimedia
-    },
-    sucheMultimediaDef: {
-        path: '/sucheMultimedia',
-        name: 'SucheMultimedia',
-        component: SucheMultimedia
     },
     redirect: {path: '/', redirectTo: ['Home']}
 };

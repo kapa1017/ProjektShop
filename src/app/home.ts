@@ -23,7 +23,11 @@ import {Component} from 'angular2/core';
 @Component({
     selector: 'home',
     template: `
-        <h2>Hallo!</h2>
+        <div class="jumbotron">
+            <h1>Beispiel .....</h1>
+            <p> ... </p>
+            <h2>bsp...</h2>
+        </div>
     `
 })
 export default class Home {

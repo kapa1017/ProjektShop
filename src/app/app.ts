@@ -131,8 +131,9 @@ import {APP_ROUTE_DEFINITIONS} from './routes';
             <app-header></app-header>
         </div>
         <div class="row">
-            <!-- Eigene Komponente fuer die Navigationsleiste -->
             <app-nav></app-nav>
+        </div>
+        <div class="row">
             <!-- Eigene Komponente fuer den Haupteil: austauschbar durch Routing -->
             <app-main></app-main>
         </div>

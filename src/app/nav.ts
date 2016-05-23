@@ -27,53 +27,34 @@ import {isAdmin} from '../iam/iam';
     selector: 'app-nav',
     // Internationalisierung durch z.B. https://github.com/ocombe/ng2-translate
     template: `
-        <nav class="col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3 jz-app-nav">
+        <nav class="navbar navbar-dark bg-inverse" >
             <!-- http://v4-alpha.getbootstrap.com/components/list-group/#linked-items -->
             <!-- Alternative CSS-Klassen fuer list-group: navs, nav-item, nav-link -->
             <!-- http://v4-alpha.getbootstrap.com/components/navs -->
-            <div class="list-group">
-                <!-- DSL-Pfade durch @RouteConfig([{path: '/...', name: 'Home' ...} -->
-                <div class="list-group-item">
-                    <a [routerLink]="['Home']">
-                        <i class="fa fa-home"></i> &nbsp; Startseite
-                    </a>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">NavBar</a>
                 </div>
-                <div class="list-group-item">
-                    <a [routerLink]="['SucheKunden']">
-                        <i class="fa fa-search"></i> &nbsp; Suche Kunden
-                    </a>
-                </div>
-                <div class="list-group-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['SucheKundebyBestellungId']">
-                        <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
-                    </a>
-                </div>
-                <div class="list-group-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['Balkendiagramm']">
-                        <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm Bestellungen
-                    </a>
-                </div>
-                <div class="list-group-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['Liniendiagramm']">
-                        <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm Bestellungen
-                    </a>
-                </div>
-                <div class="list-group-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['Tortendiagramm']">
-                        <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm Bestellungen
-                    </a>
-                </div>
-                <div class="list-group-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['CreateMultimedia']">
-                        <i class="fa fa-book"></i> &nbsp; Multimedia hochladen
-                    </a>
-                </div>
-                <div class="list-group-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['SucheMultimedia']">
-                        <i class="fa fa-search"></i> &nbsp; Suche Multimedia
-                    </a>
-                </div>
-            </div>
+                    <ul class="nav navbar-nav" >
+                        <li class="nav-item">
+                            <a class="nav-link" [routerLink]="['Home']">
+                                <i class="fa fa-home"></i> &nbsp; Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <div class="btn-group">
+                                <button class="btn btn-secondary-outline dropdown-toggle" type="button"
+                                    id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Kunde
+                                        <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="#">SucheKunden</a></li>
+                                    <li><a href="#">CreateKunde</a></li>
+                                    <li><a href="#">UpdateKunde</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
 
                 <!-- DSL-Pfade durch @RouteConfig([{path: '/...', name: 'Home' ...} -->
             <!--
@@ -84,32 +65,24 @@ import {isAdmin} from '../iam/iam';
                 <li class="nav-item"><a [routerLink]="['SucheKunden']">
                     <i class="fa fa-search"></i> &nbsp; Suche</a>
                 </li>
-                <li class="nav-item"><a [routerLink]="['SucheKundebyBestellungId']">
-                    <i class="fa fa-search"></i> &nbsp; Suche</a>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['CreateKunde']">
+                        <i class="fa fa-book"></i> &nbsp; Neuer Kunde
+                    </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">
                     <a [routerLink]="['Balkendiagramm']">
-                        <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm Bestellungen
+                        <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">
                     <a [routerLink]="['Liniendiagramm']">
-                        <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm Bestellungen
+                        <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">
                     <a [routerLink]="['Tortendiagramm']">
                         <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['CreateMultimedia']">
-                        <i class="fa fa-book"></i> &nbsp; Multimedia hochladen
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['SucheMultimedia']">
-                        <i class="fa fa-search"></i> &nbsp; Suche Multimedia
                     </a>
                 </li>
             </ul>

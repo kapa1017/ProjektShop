@@ -20,17 +20,14 @@ import {Component} from 'angular2/core';
 import {ChartService} from '../shared/shared';
 
 import KundenService from '../kundenverwaltung/service/kunden_service';
-/*import KundenServiceMockServer from
-'../kundenverwaltung/service/mock/kunden_service_mock_server';*/
-/* import KundenServiceMockObjects from
-'../kundenverwaltung/service/mock/kunden_service_mock_objects';*/
-import KUNDEN_SERVICE_PROVIDER from
-'../kundenverwaltung/service/kunden_service';
+import KundenServiceMockServer from '../kundenverwaltung/service/mock/kunden_service_mock_server';
+import KundenServiceMockObjects from '../kundenverwaltung/service/mock/kunden_service_mock_objects';
 
+// import {BUECHER_SERVICE_PROVIDER}
+// from '../buchverwaltung/service/buecher_service';
 // import {MOCK_SERVER_PROVIDER}
-// from '../kundenverwaltung/service/mock/kunden_service_mock_server';
-// import {MOCK_OBJECTS_PROVIDER}
-// from '../kundenverwaltung/service/mock/kunden_service_mock_objects';
+// from '../buchverwaltung/service/mock/buecher_service_mock_server';
+import {MOCK_OBJECTS_PROVIDER} from '../kundenverwaltung/service/mock/kunden_service_mock_objects';
 /* tslint:enable:max-line-length */
 
 /**
@@ -41,11 +38,10 @@ import KUNDEN_SERVICE_PROVIDER from
     // Provider fuer die Main-Komponente und ihre Kindkomponenten,
     // d.h. Singletons innerhalb dieses Teilbaums
     providers: [
-        ChartService, KundenService,  // KundenServiceMockServer,
-        // KundenServiceMockObjects,
-        KUNDEN_SERVICE_PROVIDER
+        ChartService, KundenService, KundenServiceMockServer,
+        KundenServiceMockObjects,  // KUNDEN_SERVICE_PROVIDER
         // MOCK_SERVER_PROVIDER
-        // MOCK_OBJECTS_PROVIDER
+        MOCK_OBJECTS_PROVIDER
     ],
     template: `
         <main class="col-xs-12 col-sm-8 col-md-9 col-lg-9 col-xl-9">
