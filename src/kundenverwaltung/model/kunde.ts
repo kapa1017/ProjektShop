@@ -28,6 +28,8 @@ import {isPresent} from '../../shared/shared';
 import {Moment} from 'moment';
 import * as moment_ from 'moment';
 const moment: (date: string) => Moment = (<any>moment_)['default'];
+// import {IIdentityShared} from './identity';
+// import Identity from './identity';
 
 const MIN_KATEGORIE: number = 0;
 const MAX_KATEGORIE: number = 5;
@@ -60,6 +62,8 @@ export interface IKundeShared {
     seit: string;
     bemerkungen?: string;
     bestellungenUri: string;
+    geschlecht?: 'MAENNLICH'|'WEIBLICH';
+    familienstand?: 'VERHEIRATET'|'LEDIG'|'GESCHIEDEN'|'VERWITWET';
 }
 
 /**
@@ -76,10 +80,8 @@ export interface IKundeServer extends IKundeShared {
     kategorie: number;
     rabatt: number;
     umsatz: number;
-    geschlecht?: 'MAENNLICH'|'WEIBLICH';
-    familienstand?: 'VERHEIRATET'|'LEDIG'|'GESCHIEDEN'|'VERWITWET';
-    hobbys?: Array<string>;
     // familienstand?: 'VERHEIRATET'|'LEDIG'|'GESCHIEDEN'|'VERWITWET';
+    hobbys?: Array<string>;
 }
 
 /**
@@ -93,14 +95,15 @@ export interface IKundeForm extends IKundeShared {
     kategorie: string;
     p: RadioButtonState;
     f: RadioButtonState;
+    nachname: string;
     rabatt: string;
     umsatz: string;
     /* verheiratet?: RadioButtonState;
     ledig?: RadioButtonState;
     geschieden?: RadioButtonState;
     verwitwet?: RadioButtonState;*/
-    männlich: RadioButtonState;
-    weiblich: RadioButtonState;
+    /*maennlich: RadioButtonState;
+    weiblich: RadioButtonState;*/
     sport?: boolean;
     lesen?: boolean;
     reisen?: boolean;
@@ -111,6 +114,7 @@ export interface IKundeForm extends IKundeShared {
  * Functions fuer Abfragen und Aenderungen.
  */
 export default class Kunde {
+    // identity: Identity = new Identity(null, null,null, null, null, null);
     public kategorieArray: Array<boolean> = [];
     // wird i.a. nicht direkt aufgerufen, sondern Buch.fromServer oder
     // Buch.fromForm
@@ -169,8 +173,8 @@ export default class Kunde {
      */
     static fromForm(kundeForm: IKundeForm): Kunde {
         const typ: 'P'|'F' = kundeForm.p.checked ? 'P' : 'F';
-        const geschlecht: 'MAENNLICH'|'WEIBLICH' =
-            kundeForm.männlich.checked ? 'MAENNLICH' : 'WEIBLICH';
+        /*const geschlecht: 'MAENNLICH'|'WEIBLICH' =
+            kundeForm.maennlich.checked ? 'MAENNLICH' : 'WEIBLICH';*/
         const hobbys: Array<string> = [];
         if (kundeForm.sport) {
             hobbys.push('SPORT');
@@ -186,8 +190,8 @@ export default class Kunde {
             kundeForm.id, kundeForm.identity, parseInt(kundeForm.kategorie, 10),
             parseInt(kundeForm.rabatt, 10) / 100, parseFloat(kundeForm.umsatz),
             null, kundeForm.newsletter, kundeForm.agbAkzeptiert,
-            kundeForm.bemerkungen, kundeForm.bestellungenUri, geschlecht, typ,
-            null, hobbys);
+            kundeForm.bemerkungen, kundeForm.bestellungenUri,
+            kundeForm.geschlecht, typ, null, hobbys);
         // familienstand
         console.log('Kunde.fromForm(): kunde=', kunde);
         return kunde;

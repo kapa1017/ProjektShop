@@ -534,17 +534,20 @@ export default class KundenService extends AbstractKundenService {
         URLSearchParams {
         const searchParams: URLSearchParams = new URLSearchParams();
 
-        /*if (!isEmpty(suchkriterien.identity.nachname)) {
-            searchParams.set('nachname', suchkriterien.identity.nachname);
-        }*/
+        if (!isEmpty(suchkriterien.nachname)) {
+            searchParams.set('nachname', suchkriterien.nachname);
+        }
         if (!isEmpty(suchkriterien.seit)) {
             searchParams.set('seit', suchkriterien.seit);
         }
-        if (suchkriterien.männlich) {
+        if (!isEmpty(suchkriterien.geschlecht)) {
+            searchParams.set('geschlecht', suchkriterien.geschlecht);
+        }
+        /* if (suchkriterien.maennlich) {
             searchParams.set('geschlecht', 'MAENNLICH');
         } else if (suchkriterien.weiblich) {
             searchParams.set('geschlecht', 'WEIBLICH');
-        }
+        }*/
         return searchParams;
     }
 
