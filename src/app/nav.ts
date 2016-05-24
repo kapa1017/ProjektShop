@@ -41,33 +41,23 @@ import {isAdmin} from '../iam/iam';
                             </a>
                         </li>
                         <li class="nav-item">
-                            <div class="btn-group">
-                                <button class="btn btn-secondary-outline dropdown-toggle" type="button"
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button"
                                     id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         Kunde
                                         <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li class="nav-item"><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['DetailsKunde']"> &nbsp; DetailsKunde</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['UpdateKunde']"> &nbsp; UpdateKunde</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['UpdatePrivatkunde']"> &nbsp; UpdatePrivatkunde</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['Balkendiagramm']"> &nbsp; Balkendiagramm</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['Liniendiagramm']"> &nbsp; Liniendiagramm</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['Tortendiagramm']"> &nbsp; Tortendiagramm</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['CreateMultimedia']"> &nbsp; CreateMultimedia</a>
-                                    </li>
-                                    <li class="nav-item"><a [routerLink]="['sucheMultimedia']"> &nbsp; sucheMultimedia</a>
-                                    </li>
+                                    <li><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a></li>
+                                    <li><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a></li>
+                                    <li><a [routerLink]="['DetailsKunde']"> &nbsp; DetailsKunde</a></li>
+                                    <li><a [routerLink]="['UpdateKunde']"> &nbsp; UpdateKunde</a></li>
+                                    <li><a [routerLink]="['UpdatePrivatkunde']"> &nbsp; UpdatePrivatkunde</a></li>
+                                    <li><a [routerLink]="['Balkendiagramm']"> &nbsp; Balkendiagramm</a></li>
+                                    <li><a [routerLink]="['Liniendiagramm']"> &nbsp; Liniendiagramm</a></li>
+                                    <li><a [routerLink]="['Tortendiagramm']"> &nbsp; Tortendiagramm</a></li>
+                                    <li><a [routerLink]="['CreateMultimedia']"> &nbsp; CreateMultimedia</a></li>
+                                    <li><a [routerLink]="['sucheMultimedia']"> &nbsp; sucheMultimedia</a></li>
                                 </ul>
                             </div>
                         </li>
