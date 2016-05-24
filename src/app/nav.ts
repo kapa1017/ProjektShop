@@ -42,12 +42,11 @@ import {isAdmin} from '../iam/iam';
                         </li>
                         <li class="nav-item">
                             <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button"
-                                    id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Kunde
-                                        <span class="caret"></span>
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Kunde
+                                    <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
                                     <li><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a></li>
                                     <li><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a></li>
                                     <li><a [routerLink]="['DetailsKunde']"> &nbsp; DetailsKunde</a></li>
