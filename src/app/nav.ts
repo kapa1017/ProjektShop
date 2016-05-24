@@ -48,9 +48,24 @@ import {isAdmin} from '../iam/iam';
                                         <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><a href="#">SucheKunden</a></li>
-                                    <li><a href="#">CreateKunde</a></li>
-                                    <li><a href="#">UpdateKunde</a></li>
+                                    <li class="nav-item"><a [routerLink]="['SucheKunden']">
+                                        <i class="fa fa-search"></i> &nbsp; SucheKunden</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['SucheKundebyBestellungId']">
+                                        <i class="fa fa-search"></i> &nbsp; SucheKundebyBestellungId</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['DetailsKunde']">
+                                        <i class="fa fa-search"></i> &nbsp; DetailsKunde</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['UpdateKunde']">
+                                        <i class="fa fa-search"></i> &nbsp; UpdateKunde</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['UpdatePrivatkunde']">
+                                        <i class="fa fa-search"></i> &nbsp; UpdatePrivatkunde</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['Balkendiagramm']">
+                                        <i class="fa fa-search"></i> &nbsp; Balkendiagramm</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
