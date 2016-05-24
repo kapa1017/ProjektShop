@@ -48,23 +48,25 @@ import {isAdmin} from '../iam/iam';
                                         <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li class="nav-item"><a [routerLink]="['SucheKunden']">
-                                        <i class="fa fa-search"></i> &nbsp; SucheKunden</a>
+                                    <li class="nav-item"><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a>
                                     </li>
-                                    <li class="nav-item"><a [routerLink]="['SucheKundebyBestellungId']">
-                                        <i class="fa fa-search"></i> &nbsp; SucheKundebyBestellungId</a>
+                                    <li class="nav-item"><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a>
                                     </li>
-                                    <li class="nav-item"><a [routerLink]="['DetailsKunde']">
-                                        <i class="fa fa-search"></i> &nbsp; DetailsKunde</a>
+                                    <li class="nav-item"><a [routerLink]="['DetailsKunde']"> &nbsp; DetailsKunde</a>
                                     </li>
-                                    <li class="nav-item"><a [routerLink]="['UpdateKunde']">
-                                        <i class="fa fa-search"></i> &nbsp; UpdateKunde</a>
+                                    <li class="nav-item"><a [routerLink]="['UpdateKunde']"> &nbsp; UpdateKunde</a>
                                     </li>
-                                    <li class="nav-item"><a [routerLink]="['UpdatePrivatkunde']">
-                                        <i class="fa fa-search"></i> &nbsp; UpdatePrivatkunde</a>
+                                    <li class="nav-item"><a [routerLink]="['UpdatePrivatkunde']"> &nbsp; UpdatePrivatkunde</a>
                                     </li>
-                                    <li class="nav-item"><a [routerLink]="['Balkendiagramm']">
-                                        <i class="fa fa-search"></i> &nbsp; Balkendiagramm</a>
+                                    <li class="nav-item"><a [routerLink]="['Balkendiagramm']"> &nbsp; Balkendiagramm</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['Liniendiagramm']"> &nbsp; Liniendiagramm</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['Tortendiagramm']"> &nbsp; Tortendiagramm</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['CreateMultimedia']"> &nbsp; CreateMultimedia</a>
+                                    </li>
+                                    <li class="nav-item"><a [routerLink]="['sucheMultimedia']"> &nbsp; sucheMultimedia</a>
                                     </li>
                                 </ul>
                             </div>
