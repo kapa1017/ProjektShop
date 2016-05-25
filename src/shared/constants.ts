@@ -38,4 +38,5 @@ export const BASE_URI: string = `${SCHEME}://${SERVERNAME}:${PORT}${BASE_PATH}`;
  * Pfad f&uuml;r den Zugriff auf B&uuml;cher, ausgehend von der Basis-URI.
  */
 export const PATH_KUNDEN: string = `kunden`;
+export const PATH_ARTIKELS: string = `artikels`;
 export const PATH_REGISTRIERUNG: string = `registrierung`;

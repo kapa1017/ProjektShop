@@ -128,14 +128,17 @@ export default class GefundeneArtikels {
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Artikel in der Detailsseite anzeigen.
+     * Das ausgew&auml;hlte bzw. angeklickte Artikel in der Detailsseite
+     * anzeigen.
      * @param artikel Das ausgew&auml;hlte Artikel
      */
     @log
     details(artikel: Artikel): void {
-        console.log(`detailsArtikelDef.name=${APP_ROUTES.detailsArtikelDef.name}`);
+        console.log(
+            `detailsArtikelDef.name=${APP_ROUTES.detailsArtikelDef.name}`);
         console.log(`id=${artikel._id}`);
-        this._router.navigate([APP_ROUTES.detailsArtikelDef.name, {id: artikel._id}]);
+        this._router.navigate(
+            [APP_ROUTES.detailsArtikelDef.name, {id: artikel._id}]);
     }
 
     /**
@@ -148,7 +151,8 @@ export default class GefundeneArtikels {
             console.error(`Fehler beim Loeschen: status=${status}`);
         };
         this._artikelsService.remove(artikel, null, errorFn);
-        this.artikels = this.artikels.filter((b: Artikel) => b._id !== artikel._id);
+        this.artikels =
+            this.artikels.filter((b: Artikel) => b._id !== artikel._id);
     }
 
     toString(): String { return 'GefundeneArtikels'; }

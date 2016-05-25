@@ -115,7 +115,8 @@ export default class Stammdaten implements OnInit {
         console.log('Stammdaten.ngOnInit(): artikel=', this.artikel);
 
         // Definition und Vorbelegung der Eingabedaten
-        this.bezeichnung = new Control(this.artikel.bezeichnung,ArtikelValidator.bezeichnung);
+        this.bezeichnung =
+            new Control(this.artikel.bezeichnung, ArtikelValidator.bezeichnung);
         this.art = new Control(this.artikel.art, Validators.required);
         this.lieferant = new Control(this.artikel.lieferant);
 

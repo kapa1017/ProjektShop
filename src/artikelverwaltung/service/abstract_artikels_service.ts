@@ -40,7 +40,8 @@ abstract class AbstractArtikelsService {
 
     abstract observeArtikels(
         observerFn: (artikels: Array<Artikel>) => void, thisArg: any): void;
-    abstract observeArtikel(observerFn: (artikel: Artikel) => void, thisArg: any): void;
+    abstract observeArtikel(
+        observerFn: (artikel: Artikel) => void, thisArg: any): void;
     abstract observeError(
         observerFn: (err: string|number) => void, thisArg: any): void;
 

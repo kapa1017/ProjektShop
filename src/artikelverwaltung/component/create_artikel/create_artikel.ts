@@ -47,7 +47,8 @@ import {isPresent, log} from '../../../shared/shared';
 
     // Keine Zerlegung in Subkomponenten, weil das Control-Objekt der
     // Subkomponente im Konstruktor fuer die ControlGroup benoetigt wird
-    templateUrl: '/artikelverwaltung/component/create_artikel/create_artikel.html'
+    templateUrl:
+        '/artikelverwaltung/component/create_artikel/create_artikel.html'
 
     // FIXME Relative URL https://github.com/angular/angular/issues/2383
     //       erfordert TypeScript 1.8 wg. Moment und CommonJS
@@ -92,7 +93,7 @@ export default class CreateArtikel implements OnInit {
     ngOnInit(): void {
         this.form = this._formBuilder.group({
             // siehe ngFormControl innerhalb von @Component({template: `...`})
-            'bezeichnung': this.bezeichung,
+            'bezeichnung': this.bezeichnung,
             'rating': this.rating,
             'lieferant': this.lieferant,
             'ebay': this.ebay,
@@ -145,9 +146,11 @@ export default class CreateArtikel implements OnInit {
         };
         const errorFn: (status: number, text: string) => void =
             (status: number, text: string = null): void => {
-                console.log(`CreateArtikel.save(): errorFn(): status: ${status}`);
+                console.log(
+                    `CreateArtikel.save(): errorFn(): status: ${status}`);
                 if (isPresent(text)) {
-                    console.log(`CreateArtikel.save(): errorFn(): text: ${text}`);
+                    console.log(
+                        `CreateArtikel.save(): errorFn(): text: ${text}`);
                 }
             };
         this._artikelsService.save(neuesArtikel, successFn, errorFn);

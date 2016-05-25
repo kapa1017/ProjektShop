@@ -47,8 +47,7 @@ import ARTIKELS_SERVICE_PROVIDER from
         ChartService, KundenService,  // KundenServiceMockServer,
         ArtikelsService,
         // KundenServiceMockObjects,
-        KUNDEN_SERVICE_PROVIDER,
-        ARTIKELS_SERVICE_PROVIDER
+        KUNDEN_SERVICE_PROVIDER, ARTIKELS_SERVICE_PROVIDER
         // MOCK_SERVER_PROVIDER
         // MOCK_OBJECTS_PROVIDER
     ],

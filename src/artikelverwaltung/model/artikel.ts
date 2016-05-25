@@ -113,7 +113,6 @@ export default class Artikel {
             this.ratingArray.push(false);
         }
     }
-
     /**
      * Ein Buch-Objekt mit JSON-Daten erzeugen, die von einem RESTful Web
      * Service kommen.
@@ -123,8 +122,9 @@ export default class Artikel {
     static fromServer(artikelServer: IArtikelServer): Artikel {
         const artikel: Artikel = new Artikel(
             artikelServer._id, artikelServer.bezeichnung, artikelServer.rating,
-            artikelServer.art, artikelServer.lieferant, moment(artikelServer.datum), 
-            artikelServer.preis, artikelServer.rabatt, artikelServer.lieferbar,
+            artikelServer.art, artikelServer.lieferant,
+            moment(artikelServer.datum), artikelServer.preis,
+            artikelServer.rabatt, artikelServer.lieferbar,
             artikelServer.schlagwoerter);
         console.log('Artikel.fromServer(): artikel=', artikel);
         return artikel;
@@ -137,7 +137,7 @@ export default class Artikel {
      */
     static fromForm(artikelForm: IArtikelForm): Artikel {
         const art: 'INLAND'|'AUSLAND' =
-            artikelForm.druckausgabe.checked ? 'EBAY' : 'AMAZON';
+            artikelForm.druckausgabe.checked ? 'INLAND' : 'AUSLAND';
 
         const schlagwoerter: Array<string> = [];
         if (artikelForm.schnulze) {
@@ -148,8 +148,9 @@ export default class Artikel {
         }
         // preis und rabatt muss von string in number konvertiert werden
         const artikel: Artikel = new Artikel(
-            artikelForm._id, artikelForm.bezeichnung, parseInt(artikelForm.rating, 10),
-            art, artikelForm.lieferant, null, parseInt(artikelForm.preis, 10),
+            artikelForm._id, artikelForm.bezeichnung,
+            parseInt(artikelForm.rating, 10), art, artikelForm.lieferant, null,
+            parseInt(artikelForm.preis, 10),
             parseInt(artikelForm.rabatt, 10) / 100, artikelForm.lieferbar,
             schlagwoerter);
         console.log('Artikel.fromForm(): artikel=', artikel);
@@ -169,7 +170,8 @@ export default class Artikel {
      *         false.
      */
     containsTitel(bezeichnung: string): boolean {
-        return this.bezeichnung.toLowerCase().includes(bezeichnung.toLowerCase());
+        return this.bezeichnung.toLowerCase().includes(
+            bezeichnung.toLowerCase());
     }
 
     /**
@@ -195,7 +197,9 @@ export default class Artikel {
      * @param verlag der Name des Verlags
      * @return true, falls das Buch dem Verlag zugeordnet ist. Sonst false.
      */
-    hasVerlag(lieferant: string): boolean { return this.lieferant === lieferant; }
+    hasVerlag(lieferant: string): boolean {
+        return this.lieferant === lieferant;
+    }
 
     /**
      * Aktualisierung der Stammdaten des Buch-Objekts.

@@ -30,7 +30,7 @@ import {IChart, ChartDataSet, LinearChartData, CircularChartData} from 'chart.js
 import Artikel from '../model/artikel';
 import {IArtikelServer, IArtikelForm} from '../model/artikel';
 import AbstractArtikelsService from './abstract_artikels_service';
-import {ChartService, BASE_URI, PATH_BUECHER, isBlank, isPresent, isEmpty, log} from '../../shared/shared';
+import {ChartService, BASE_URI, PATH_ARTIKELS, isBlank, isPresent, isEmpty, log} from '../../shared/shared';
 import {getAuthorization} from '../../iam/iam';
 /* tslint:enable:max-line-length */
 
@@ -54,7 +54,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
     private _baseUriArtikels: string;
     private _artikelsEmitter: EventEmitter<Array<Artikel>> =
         new EventEmitter<Array<Artikel>>();
-    private _artikelEmitter: EventEmitter<Artikel> = new EventEmitter<Artikel>();
+    private _artikelEmitter: EventEmitter<Artikel> =
+        new EventEmitter<Artikel>();
     private _errorEmitter: EventEmitter<string|number> =
         new EventEmitter<string|number>();
     private _artikel: Artikel = null;
@@ -68,7 +69,7 @@ export default class ArtikelsService extends AbstractArtikelsService {
         @Inject(ChartService) private _chartService: ChartService,
         @Inject(Http) private _http: Http) {
         super();
-        this._baseUriArtikels = `${BASE_URI}${PATH_BUECHER}`;
+        this._baseUriArtikels = `${BASE_URI}${PATH_ARTIKELS}`;
         console.log(
             `ArtikelsService.constructor(): baseUriArtikels=${this._baseUriArtikels}`);
     }
@@ -84,8 +85,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
     }
 
     @log
-    observeArtikels(observerFn: (artikels: Array<Artikel>) => void, thisArg: any):
-        void {
+    observeArtikels(
+        observerFn: (artikels: Array<Artikel>) => void, thisArg: any): void {
         this._artikelsEmitter.forEach(observerFn, thisArg);
     }
 
@@ -112,7 +113,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
 
         const nextFn: ((response: Response) => void) = (response: Response) => {
             console.log('ArtikelsService.find(): nextFn()');
-            let artikels: Array<Artikel> = this._responseToArrayArtikel(response);
+            let artikels: Array<Artikel> =
+                this._responseToArrayArtikel(response);
             this._artikelsEmitter.emit(artikels);
         };
         const errorFn: (err: Response) => void = (err: Response) => {
@@ -435,7 +437,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
     @log
     private _createBarChart(
         chartElement: HTMLCanvasElement, artikels: Array<Artikel>): void {
-        const labels: Array<string> = artikels.map((artikel: Artikel) => artikel._id);
+        const labels: Array<string> =
+            artikels.map((artikel: Artikel) => artikel._id);
         const datasets: Array<ChartDataSet> = [{
             label: 'Bewertungen',
             fillColor: 'rgba(220,220,220,0.2)',
@@ -461,7 +464,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
     @log
     private _createLineChart(
         chartElement: HTMLCanvasElement, artikels: Array<Artikel>): void {
-        const labels: Array<string> = artikels.map((artikel: Artikel) => artikel._id);
+        const labels: Array<string> =
+            artikels.map((artikel: Artikel) => artikel._id);
         const datasets: Array<ChartDataSet> = [{
             label: 'Bewertungen',
             fillColor: 'rgba(220,220,220,0.2)',
@@ -510,5 +514,5 @@ export default class ArtikelsService extends AbstractArtikelsService {
     }
 }
 
-export const BUECHER_SERVICE_PROVIDER: Provider =
+export const ARTIKELS_SERVICE_PROVIDER: Provider =
     provide(ArtikelsService, {useClass: ArtikelsService});
