@@ -47,6 +47,7 @@ import {isAdmin} from '../iam/iam';
                                     <span class="caret"></span>
                                 </button>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
                                     <li><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a></li>
                                     <li><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a></li>
@@ -94,6 +95,19 @@ import {isAdmin} from '../iam/iam';
                                         </a>
                                     </li>
 >>>>>>> 23829c4ff5069f418e7db7e8661fbdd779ba7537
+=======
+                                <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
+                                    <li><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a></li>
+                                    <li><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a></li>
+                                    <li><a [routerLink]="['DetailsKunde']"> &nbsp; DetailsKunde</a></li>
+                                    <li><a [routerLink]="['UpdateKunde']"> &nbsp; UpdateKunde</a></li>
+                                    <li><a [routerLink]="['UpdatePrivatkunde']"> &nbsp; UpdatePrivatkunde</a></li>
+                                    <li><a [routerLink]="['Balkendiagramm']"> &nbsp; Balkendiagramm</a></li>
+                                    <li><a [routerLink]="['Liniendiagramm']"> &nbsp; Liniendiagramm</a></li>
+                                    <li><a [routerLink]="['Tortendiagramm']"> &nbsp; Tortendiagramm</a></li>
+                                    <li><a [routerLink]="['CreateMultimedia']"> &nbsp; CreateMultimedia</a></li>
+                                    <li><a [routerLink]="['sucheMultimedia']"> &nbsp; sucheMultimedia</a></li>
+>>>>>>> navLinks
                                 </ul>
                             </div>
                         </li>
