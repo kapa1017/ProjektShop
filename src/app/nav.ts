@@ -48,9 +48,36 @@ import {isAdmin} from '../iam/iam';
                                         <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><a href="#">SucheKunden</a></li>
-                                    <li><a href="#">CreateKunde</a></li>
-                                    <li><a href="#">UpdateKunde</a></li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheKunden']">
+                                            <i class="fa fa-search"></i> &nbsp; Suche Kunden
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheBestellungenIds']">
+                                            <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheKundebyBestellungId']">
+                                            <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['Balkendiagramm']">
+                                            <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm Bestellungen
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['Liniendiagramm']">
+                                            <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm Bestellungen
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['Tortendiagramm']">
+                                            <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -59,15 +86,24 @@ import {isAdmin} from '../iam/iam';
                 <!-- DSL-Pfade durch @RouteConfig([{path: '/...', name: 'Home' ...} -->
             <!--
             <ul class="nav nav-pills nav-stacked">
-                <li class="nav-item"><a [routerLink]="['Home']">
-                    <i class="fa fa-home"></i> &nbsp; Startseite</a>
-                </li>
-                <li class="nav-item"><a [routerLink]="['SucheKunden']">
-                    <i class="fa fa-search"></i> &nbsp; Suche</a>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['Home']">
+                        <i class="fa fa-home"></i> &nbsp; Startseite
+                    </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['CreateKunde']">
-                        <i class="fa fa-book"></i> &nbsp; Neuer Kunde
+                    <a [routerLink]="['SucheKunden']">
+                        <i class="fa fa-search"></i> &nbsp; Suche
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['SucheBestellungenIds']">
+                        <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['SucheKundebyBestellungId']">
+                        <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">

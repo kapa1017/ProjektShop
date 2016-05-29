@@ -27,37 +27,44 @@ import KundenService from '../../service/kunden_service';
  * Komponente f&uuml;r das Tag <code>gefundene-bueche</code>
  */
 @Component({
-    selector: 'gefundenes-multimedia',
+    selector: 'gefundene-bestellungenids',
     directives: [CORE_DIRECTIVES],
     template: `
         <!-- Template Binding durch die Direktive ngIf -->
         <!-- Eine Direktive ist eine Komponente ohne View -->
-        <div class="card" *ngIf="file != null">
+        <div class="card" *ngIf="bestellungenIds != null">
             <div class="card-header">
-                <h4><i class="fa fa-folder-open-o"></i> Gefundenes Multimedia</h4>
+                <h4><i class="fa fa-folder-open-o"></i> Gefundene BestellungenIds</h4>
             </div>
-            <div class="card-block" *ngIf="file.type === 'image/jpeg'|'image/pjpeg'|'image/png'">
-            <img src="{{file.name}}">
-            </div>
-            <div class="card-block" *ngIf="file.type === 'video/mp4'">
-            <video src="{{file.name}}"></video>
-            </div>
-            <div class="card-block" *ngIf="file.type === 'audio/wav'">
-            <audio src="{{file.name}}"></audio>
+            <div class="card-block">
+                <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                        <th>Nr.</th>
+                        <th>Bestellung</th>
+                    </thead>
+                    <tbody>
+                        <!-- Template Binding: ngFor -->
+                        <!-- Event-Binding: statt (click) auch on-click -->
+                        <tr *ngFor="#bestellungenId of bestellungenIds; #i = index">
+                            <td>{{i + 1}}</td>
+                            <td>{{bestellungenId}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     `
 })
-export default class GefundenerKunde {
+export default class GefundeneBestellungenids {
     // Property Binding: <gefundene-buecher [buecher]="...">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
-    @Input() file: File;
+    @Input() bestellungenIds: Array<String>;
 
     constructor(
         private _kundenService: KundenService, private _router: Router) {
-        console.log('GefundenesMultimedia.constructor()');
+        console.log('GefundeneKunden.constructor()');
     }
 
-    toString(): String { return 'GefundenesMultimedia'; }
+    toString(): String { return 'GefundeneBestellungenids'; }
 }

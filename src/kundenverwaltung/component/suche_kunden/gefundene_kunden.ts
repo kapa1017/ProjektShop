@@ -86,11 +86,6 @@ import {log} from '../../../shared/shared';
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer">
-                <i class="fa fa-info-circle"></i>
-                Zur Anzeige der JSON-Datens&auml;tze in gefundene_kunden.ts
-                den Kommentar beim Tag &lt;pre&gt; entfernen
-            </div>
         </div>
 
         <!-- Ausgabe des JSON-Datensatzes im Webbrowser statt console.log(...) -->

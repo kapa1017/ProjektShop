@@ -37,7 +37,7 @@ import {isString, Waiting, ErrorMessage} from '../../../shared/shared';
         <waiting [activated]="waiting"></waiting>
 
         <section *ngIf="kunde !== null">
-            <h4>Kunde {{kunde._id}}:</h4>
+            <h4>Kunde {{kunde.id}}:</h4>
 
         <!-- http://v4-alpha.getbootstrap.com/components/navs/#tabs -->
             <ul class="nav nav-tabs">
@@ -87,7 +87,7 @@ import {isString, Waiting, ErrorMessage} from '../../../shared/shared';
                 </a>
             </div>
         </section>
-
+       
         <error-message [text]="errorMsg"></error-message>
     `
 })

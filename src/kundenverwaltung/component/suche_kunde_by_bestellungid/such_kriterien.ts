@@ -20,7 +20,7 @@ import {Component, Output, EventEmitter} from 'angular2/core';
 // "common" enthaelt Direktiven (z.B. ngFor, ngIf), Form Controls und Pipes
 import {CORE_DIRECTIVES} from 'angular2/common';
 import KundenService from '../../service/kunden_service';
-import {log} from '../../../shared/shared';
+import {log, isEmpty} from '../../../shared/shared';
 
 /**
  * Komponente f&uuml;r das Tag <code>such-kriterien</code>
@@ -108,8 +108,9 @@ export default class SuchKriterien {
     @log
     findByBestellungId(): boolean {
         console.log('bestellungId=', this.bestellungId);
-
-        this.waiting.emit(true);
+        if (!isEmpty(this.bestellungId)) {
+            this.waiting.emit(true);
+        }
         this._kundenService.findByBestellungId(this.bestellungId);
 
         // Inspektion der Komponente mit dem Tag-Namen "app" im Debugger

@@ -56,6 +56,8 @@ export class ChartService {
             1, {color: '#46BFBD', highlight: '#5AD3D1'});  // green
         this._colorsPie.set(
             2, {color: '#FDB45C', highlight: '#FFC870'});  // yellow
+        this._colorsPie.set(
+            3, {color: '#BED6F8', highlight: '#BED6F8'});  // bluesky
     }
 
     /**
@@ -85,7 +87,7 @@ export class ChartService {
      * @return String mit dem Hex-Code der Farbe.
      */
     getColorPie(idx: number): string {
-        return this._colorsPie.get(idx % 3).color;
+        return this._colorsPie.get(idx % 4).color;
     }
 
     /**
@@ -94,7 +96,7 @@ export class ChartService {
      * @return String mit dem Hex-Code dieser Farbe.
      */
     getHighlightPie(idx: number): string {
-        return this._colorsPie.get(idx % 3).highlight;
+        return this._colorsPie.get(idx % 4).highlight;
     }
 
     toString(): string {

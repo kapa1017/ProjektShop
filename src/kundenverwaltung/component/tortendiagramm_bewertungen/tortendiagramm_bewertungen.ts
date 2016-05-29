@@ -29,7 +29,7 @@ import {isAdmin} from '../../../iam/iam';
     selector: 'tortendiagramm-bewertungen',
     template: `
         <section id="stats">
-            <canvas id="chart" width="600" height="400"></canvas>
+            <canvas id="chart" width="1000" height="800"></canvas>
         </section>
     `
 })

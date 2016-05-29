@@ -119,7 +119,8 @@ export default class SuchErgebnis implements OnInit {
                     this.errorMsg = 'Keinen Kunden gefunden.';
                     break;
                 default:
-                    this.errorMsg = 'Ein Fehler ist aufgetreten.';
+                    this.errorMsg =
+                        'Bite geben Sie eine sinnvolle Bestellungid ein.';
                     break;
             }
             console.log(`SuchErgebnis.errorMsg: ${this.errorMsg}`);

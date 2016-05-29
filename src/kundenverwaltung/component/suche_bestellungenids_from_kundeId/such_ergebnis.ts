@@ -18,9 +18,8 @@
 import {Component, OnInit, Input} from 'angular2/core';
 import {Router} from 'angular2/router';
 
-import GefundenesMultimedia from './gefundenes_multimedia';
+import GefundeneBestellungenIds from './gefundene-bestellungenids';
 import KundenService from '../../service/kunden_service';
-// import File from '../../model/file';
 import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
 
 /**
@@ -34,11 +33,11 @@ import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
  */
 @Component({
     selector: 'such-ergebnis',
-    directives: [Waiting, GefundenesMultimedia, ErrorMessage],
+    directives: [Waiting, GefundeneBestellungenIds, ErrorMessage],
     template: `
         <section>
             <waiting [activated]="waiting"></waiting>
-            <gefundenes-multimedia [file]="file"></gefundenes-multimedia>
+            <gefundene-bestellungenids [bestellungenIds]="bestellungenIds"></gefundene-bestellungenids>
             <error-message [text]="errorMsg"></error-message>
         <section>
     `
@@ -52,7 +51,7 @@ export default class SuchErgebnis implements OnInit {
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input() waiting: boolean;
 
-    file: File = null;
+    bestellungenIds: Array<string> = null;
     errorMsg: string = null;
 
     constructor(
@@ -68,7 +67,7 @@ export default class SuchErgebnis implements OnInit {
     // Die Ableitung vom Interface OnInit ist nicht notwendig, aber erleichtet
     // IntelliSense bei der Verwendung von TypeScript.
     ngOnInit(): void {
-        this._observeFile();
+        this._observeBestellungenIds();
         this._observeError();
     }
 
@@ -80,16 +79,19 @@ export default class SuchErgebnis implements OnInit {
      * <code>ngOnInit</code> aufgerufen.
      */
     /* tslint:disable:align */
-    private _observeFile(): void {
+    private _observeBestellungenIds(): void {
         // Funktion als Funktionsargument, d.h. Code als Daten uebergeben
-        this._kundenService.observeFile((file: File) => {
-            // zuruecksetzen
-            this.waiting = false;
-            this.errorMsg = null;
+        this._kundenService.observeBestellungenIds(
+            (bestellungenIds: Array<string>) => {
+                // zuruecksetzen
+                this.waiting = false;
+                this.errorMsg = null;
 
-            this.file = file;
-            console.log('SuchErgebnis.file:', this.file);
-        }, this);
+                this.bestellungenIds = bestellungenIds;
+                console.log(
+                    'SuchErgebnis.bestellungenIds:', this.bestellungenIds);
+            },
+            this);
     }
 
     /**
@@ -102,7 +104,7 @@ export default class SuchErgebnis implements OnInit {
         this._kundenService.observeError((err: string | number) => {
             // zuruecksetzen
             this.waiting = false;
-            this.file = null;
+            this.bestellungenIds = null;
 
             if (err === null) {
                 this.errorMsg = 'Ein Fehler ist aufgetreten.';
@@ -116,10 +118,11 @@ export default class SuchErgebnis implements OnInit {
 
             switch (err) {
                 case 404:
-                    this.errorMsg = 'Keine Datei gefunden.';
+                    this.errorMsg = 'Keine BestellungenIds gefunden.';
                     break;
                 default:
-                    this.errorMsg = 'Ein Fehler ist aufgetreten.';
+                    this.errorMsg =
+                        'Bite geben Sie eine sinnvolle Kundenid ein.';
                     break;
             }
             console.log(`SuchErgebnis.errorMsg: ${this.errorMsg}`);

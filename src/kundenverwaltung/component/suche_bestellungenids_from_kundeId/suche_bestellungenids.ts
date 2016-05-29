@@ -30,7 +30,7 @@ import {log} from '../../../shared/shared';
  * </ul>
  */
 @Component({
-    selector: 'suche-multimedia',
+    selector: 'suche_bestellungenids',
     directives: [SuchKriterien, SuchErgebnis],
     template: `
         <such-kriterien (waiting)="setWaiting($event)"></such-kriterien>
@@ -45,15 +45,15 @@ import {log} from '../../../shared/shared';
         -->
     `
 })
-export default class SucheMultimedia implements OnDestroy {
+export default class SucheBestellungenids implements OnDestroy {
     waiting: boolean = false;
 
-    constructor() { console.log('SucheMultimedia.constructor()'); }
+    constructor() { console.log('SucheBestellungenidsconstructor()'); }
 
     // Methode zum "LifeCycle Hook" OnDestroy:
     // wird direkt vor dem Garbage Collector aufgerufen
     // node_modules\angular2\ts\src\core\linker\interfaces.ts
-    ngOnDestroy(): void { console.log('SucheMultimedia.onDestroy()'); }
+    ngOnDestroy(): void { console.log('SucheBestellungenids.onDestroy()'); }
 
     /**
      * Das Attribut <code>waiting</code> wird auf den Wert des boole'schen
@@ -67,5 +67,5 @@ export default class SucheMultimedia implements OnDestroy {
     @log
     setWaiting($event: boolean): void { this.waiting = $event; }
 
-    toString(): String { return 'SucheMultimedia'; }
+    toString(): String { return 'SucheBestellungenids'; }
 }
