@@ -41,16 +41,25 @@ import {isAdmin} from '../iam/iam';
                             </a>
                         </li>
                         <li class="nav-item">
-                            <div class="btn-group">
-                                <button class="btn btn-secondary-outline dropdown-toggle" type="button"
-                                    id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Kunde
-                                        <span class="caret"></span>
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Kunde
+                                    <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><a href="#">SucheKunden</a></li>
-                                    <li><a href="#">CreateKunde</a></li>
-                                    <li><a href="#">UpdateKunde</a></li>
+                                <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
+                                    <li><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a></li>
+                                    <li><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Artikel
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
+                                    <li><a [routerLink]="['SucheArtikels']"> &nbsp; SucheArtikels</a></li>
                                 </ul>
                             </div>
                         </li>
