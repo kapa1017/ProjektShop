@@ -22,29 +22,32 @@ import {CORE_DIRECTIVES} from 'angular2/common';
  * Komponente f&uuml;r das Tag <code>schlagwoerter</code>
  */
 @Component({
-    selector: 'bestellungenIds',
+    selector: 'schlagwoerter',
     directives: [CORE_DIRECTIVES],
     template: `
-         <div class="list-bestellungenIds" *ngFor="#bestellungId of bestellungenIds">
-            <ul class="bestellungenIds">
-                <li>
-                    <span>{{bestellungId}}</span>
-                </li>
-            </ul>
-         </div>
+        <div class="form-group row" *ngFor="#schlagwort of schlagwoerter">
+            <div class="col-sm-offset-1 col-sm-11">
+                <div class="checkbox">
+                    <label [ngSwitch]="schlagwort">
+                        <input type="checkbox" checked disabled class="checkbox">
+                        <span *ngSwitchWhen="'SCHNULZE'">Schnulze</span>
+                        <span *ngSwitchWhen="'SCIENCE_FICTION'">Science Fiction</span>
+                    </label>
+                <div>
+            </div>
+        </div>
     `
 })
-export default class BestellungenIds implements OnInit {
+export default class Schlagwoerter implements OnInit {
     // <schlagwoerter [values]="buch.schlagwoerter">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
-    @Input('values') bestellungenIds: Array<string>;
+    @Input('values') schlagwoerter: Array<string>;
 
-    constructor() { console.log('BestellungenIds.constructor()'); }
+    constructor() { console.log('Schlagwoerter.constructor()'); }
 
     ngOnInit(): void {
         console.log(
-            'BestellungenIds.ngOnInit(): bestellungenIds=',
-            this.bestellungenIds);
+            'Schlagwoerter.ngOnInit(): schlagwoerter=', this.schlagwoerter);
     }
 }

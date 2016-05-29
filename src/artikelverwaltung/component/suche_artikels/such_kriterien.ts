@@ -19,8 +19,9 @@
 import {Component, Output, EventEmitter} from 'angular2/core';
 // "common" enthaelt Direktiven (z.B. ngFor, ngIf), Form Controls und Pipes
 import {CORE_DIRECTIVES} from 'angular2/common';
-import KundenService from '../../service/kunden_service';
-import {log, isEmpty} from '../../../shared/shared';
+
+import ArtikelsService from '../../service/artikels_service';
+import {log} from '../../../shared/shared';
 
 /**
  * Komponente f&uuml;r das Tag <code>such-kriterien</code>
@@ -55,26 +56,61 @@ import {log, isEmpty} from '../../../shared/shared';
                      form-group, row, form-control-label, btn, ...
                      http://v4-alpha.getbootstrap.com/components/forms -->
 
-                <form (submit)="findByBestellungId()" role="form">
+                <form (submit)="find()" role="form">
                     <div class="form-group row">
-                        <label for="bestellungIdInput"
-                               class="col-sm-2 form-control-label">BestellungId</label>
+                        <label for="bezeichnungInput"
+                               class="col-sm-2 form-control-label">Titel</label>
                         <div class="col-sm-10">
-                            <input id="bestellungIdInput"
+                            <input id="bezeichnungInput"
                                 type="search"
-                                placeholder="Die BestellungId eingeben"
+                                placeholder="Den Titel oder einen Teil davon eingeben"
                                 class="form-control"
-                                [(ngModel)]="bestellungId">
+                                [(ngModel)]="bezeichnung">
                         </div>
                     </div>
-                    
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 form-control-label">Verlag</label>
+                        <div class="col-sm-10">
+                            <select class="form-control"
+                                    [(ngModel)]="lieferant">
+                                <option value=""></option>
+                                <option value="OREILLY">O'Reilly</option>
+                                <option value="PACKT">Packt</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="schlagwoerterInput"
+                               class="col-sm-2 form-control-label">
+                            Schlagw&ouml;rter
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                           [(ngModel)]="schnulze"/>
+                                    Schnulze
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                           [(ngModel)]="scienceFiction"/>
+                                    Science Fiction
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-sm-offset-2 col-sm-10">
                             <i class="fa fa-info-circle"></i>
-                            Hinweis: Keine Eingabe liefert keinen Kunden
+                            Hinweis: Keine Eingabe liefert alle B&uuml;cher
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button class="btn btn-primary"><i class="fa fa-search"></i>
@@ -87,7 +123,10 @@ import {log, isEmpty} from '../../../shared/shared';
     `
 })
 export default class SuchKriterien {
-    bestellungId: string = null;
+    bezeichnung: string = null;
+    lieferant: string = null;
+    schnulze: boolean = false;
+    scienceFiction: boolean = false;
 
     // Event Binding: <such-kriterien (waiting)="...">
     // siehe OutputMetadata in
@@ -95,23 +134,28 @@ export default class SuchKriterien {
     @Output() waiting: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     // Empfehlung: Konstruktor nur fuer DI
-    constructor(private _kundenService: KundenService) {
+    constructor(private _artikelsService: ArtikelsService) {
         console.log('SuchKriterien.constructor()');
     }
 
     /**
      * Suche nach B&uuml;chern, die den spezfizierten Suchkriterien entsprechen
-     * @param suchkriterien: Suchkriterien vom Typ IBuchForm
+     * @param suchkriterien: Suchkriterien vom Typ IArtikelForm
      * @return false, um das durch den Button-Klick ausgel&ouml;ste Ereignis
      *         zu konsumieren.
      */
     @log
-    findByBestellungId(): boolean {
-        console.log('bestellungId=', this.bestellungId);
-        if (!isEmpty(this.bestellungId)) {
-            this.waiting.emit(true);
-        }
-        this._kundenService.findByBestellungId(this.bestellungId);
+    find(): boolean {
+        const suchkriterien: any = {
+            bezeichnung: this.bezeichnung,
+            lieferant: this.lieferant,
+            schnulze: this.schnulze,
+            scienceFiction: this.scienceFiction
+        };
+        console.log('suchkriterien=', suchkriterien);
+
+        this.waiting.emit(true);
+        this._artikelsService.find(suchkriterien);
 
         // Inspektion der Komponente mit dem Tag-Namen "app" im Debugger
         // Voraussetzung: globale Variable ng deklarieren (s.o.)
@@ -123,4 +167,6 @@ export default class SuchKriterien {
         // Refresh der gesamten Seite.
         return false;
     }
+
+    toString(): String { return 'SuchKriterien'; }
 }

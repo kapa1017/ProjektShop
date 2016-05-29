@@ -18,9 +18,8 @@
 import {Component, OnInit, Input} from 'angular2/core';
 import {Router} from 'angular2/router';
 
-import GefundenerKunde from './gefundener_kunde';
+import GefundeneBestellungenIds from './gefundene-bestellungenids';
 import KundenService from '../../service/kunden_service';
-import Kunde from '../../model/kunde';
 import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
 
 /**
@@ -34,11 +33,11 @@ import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
  */
 @Component({
     selector: 'such-ergebnis',
-    directives: [Waiting, GefundenerKunde, ErrorMessage],
+    directives: [Waiting, GefundeneBestellungenIds, ErrorMessage],
     template: `
         <section>
             <waiting [activated]="waiting"></waiting>
-            <gefundener-kunde [kunde]="kunde"></gefundener-kunde>
+            <gefundene-bestellungenids [bestellungenIds]="bestellungenIds"></gefundene-bestellungenids>
             <error-message [text]="errorMsg"></error-message>
         <section>
     `
@@ -52,7 +51,7 @@ export default class SuchErgebnis implements OnInit {
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input() waiting: boolean;
 
-    kunde: Kunde = null;
+    bestellungenIds: Array<string> = null;
     errorMsg: string = null;
 
     constructor(
@@ -68,7 +67,7 @@ export default class SuchErgebnis implements OnInit {
     // Die Ableitung vom Interface OnInit ist nicht notwendig, aber erleichtet
     // IntelliSense bei der Verwendung von TypeScript.
     ngOnInit(): void {
-        this._observeKunde();
+        this._observeBestellungenIds();
         this._observeError();
     }
 
@@ -80,16 +79,19 @@ export default class SuchErgebnis implements OnInit {
      * <code>ngOnInit</code> aufgerufen.
      */
     /* tslint:disable:align */
-    private _observeKunde(): void {
+    private _observeBestellungenIds(): void {
         // Funktion als Funktionsargument, d.h. Code als Daten uebergeben
-        this._kundenService.observeKunde((kunde: Kunde) => {
-            // zuruecksetzen
-            this.waiting = false;
-            this.errorMsg = null;
+        this._kundenService.observeBestellungenIds(
+            (bestellungenIds: Array<string>) => {
+                // zuruecksetzen
+                this.waiting = false;
+                this.errorMsg = null;
 
-            this.kunde = kunde;
-            console.log('SuchErgebnis.kunde:', this.kunde);
-        }, this);
+                this.bestellungenIds = bestellungenIds;
+                console.log(
+                    'SuchErgebnis.bestellungenIds:', this.bestellungenIds);
+            },
+            this);
     }
 
     /**
@@ -102,7 +104,7 @@ export default class SuchErgebnis implements OnInit {
         this._kundenService.observeError((err: string | number) => {
             // zuruecksetzen
             this.waiting = false;
-            this.kunde = null;
+            this.bestellungenIds = null;
 
             if (err === null) {
                 this.errorMsg = 'Ein Fehler ist aufgetreten.';
@@ -116,11 +118,11 @@ export default class SuchErgebnis implements OnInit {
 
             switch (err) {
                 case 404:
-                    this.errorMsg = 'Keinen Kunden gefunden.';
+                    this.errorMsg = 'Keine BestellungenIds gefunden.';
                     break;
                 default:
                     this.errorMsg =
-                        'Bite geben Sie eine sinnvolle Bestellungid ein.';
+                        'Bite geben Sie eine sinnvolle Kundenid ein.';
                     break;
             }
             console.log(`SuchErgebnis.errorMsg: ${this.errorMsg}`);

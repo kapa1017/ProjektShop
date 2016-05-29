@@ -46,6 +46,7 @@ import {isAdmin} from '../iam/iam';
                                     Kunde
                                     <span class="caret"></span>
                                 </button>
+<<<<<<< HEAD
                                 <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
                                     <li><a [routerLink]="['SucheKunden']"> &nbsp; SucheKunden</a></li>
                                     <li><a [routerLink]="['SucheKundebyBestellungId']"> &nbsp; SucheKundebyBestellungId</a></li>
@@ -60,6 +61,39 @@ import {isAdmin} from '../iam/iam';
                                 </button>
                                 <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
                                     <li><a [routerLink]="['SucheArtikels']"> &nbsp; SucheArtikels</a></li>
+=======
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheKunden']">
+                                            <i class="fa fa-search"></i> &nbsp; Suche Kunden
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheBestellungenIds']">
+                                            <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheKundebyBestellungId']">
+                                            <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['Balkendiagramm']">
+                                            <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm Bestellungen
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['Liniendiagramm']">
+                                            <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm Bestellungen
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['Tortendiagramm']">
+                                            <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm
+                                        </a>
+                                    </li>
+>>>>>>> 23829c4ff5069f418e7db7e8661fbdd779ba7537
                                 </ul>
                             </div>
                         </li>
@@ -68,15 +102,24 @@ import {isAdmin} from '../iam/iam';
                 <!-- DSL-Pfade durch @RouteConfig([{path: '/...', name: 'Home' ...} -->
             <!--
             <ul class="nav nav-pills nav-stacked">
-                <li class="nav-item"><a [routerLink]="['Home']">
-                    <i class="fa fa-home"></i> &nbsp; Startseite</a>
-                </li>
-                <li class="nav-item"><a [routerLink]="['SucheKunden']">
-                    <i class="fa fa-search"></i> &nbsp; Suche</a>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['Home']">
+                        <i class="fa fa-home"></i> &nbsp; Startseite
+                    </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">
-                    <a [routerLink]="['CreateKunde']">
-                        <i class="fa fa-book"></i> &nbsp; Neuer Kunde
+                    <a [routerLink]="['SucheKunden']">
+                        <i class="fa fa-search"></i> &nbsp; Suche
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['SucheBestellungenIds']">
+                        <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="isAdmin()">
+                    <a [routerLink]="['SucheKundebyBestellungId']">
+                        <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="isAdmin()">

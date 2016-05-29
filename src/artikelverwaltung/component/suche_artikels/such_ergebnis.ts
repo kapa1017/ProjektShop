@@ -18,9 +18,9 @@
 import {Component, OnInit, Input} from 'angular2/core';
 import {Router} from 'angular2/router';
 
-import GefundenesMultimedia from './gefundenes_multimedia';
-import KundenService from '../../service/kunden_service';
-// import File from '../../model/file';
+import GefundeneArtikels from './gefundene_artikels';
+import ArtikelsService from '../../service/artikels_service';
+import Artikel from '../../model/artikel';
 import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
 
 /**
@@ -28,17 +28,17 @@ import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
  * Kindkomponenten f&uuml;r diese Tags besteht:
  * <ul>
  *  <li><code>waiting</code>
- *  <li><code>gefundene-buecher</code>
+ *  <li><code>gefundene-artikels</code>
  *  <li><code>error-message</code>
  * </ul>
  */
 @Component({
     selector: 'such-ergebnis',
-    directives: [Waiting, GefundenesMultimedia, ErrorMessage],
+    directives: [Waiting, GefundeneArtikels, ErrorMessage],
     template: `
         <section>
             <waiting [activated]="waiting"></waiting>
-            <gefundenes-multimedia [file]="file"></gefundenes-multimedia>
+            <gefundene-artikels [artikels]="artikels"></gefundene-artikels>
             <error-message [text]="errorMsg"></error-message>
         <section>
     `
@@ -52,11 +52,11 @@ export default class SuchErgebnis implements OnInit {
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input() waiting: boolean;
 
-    file: File = null;
+    artikels: Array<Artikel> = null;
     errorMsg: string = null;
 
     constructor(
-        private _kundenService: KundenService, private _router: Router) {
+        private _artikelsService: ArtikelsService, private _router: Router) {
         console.log('SuchErgebnis.constructor()');
     }
 
@@ -68,41 +68,41 @@ export default class SuchErgebnis implements OnInit {
     // Die Ableitung vom Interface OnInit ist nicht notwendig, aber erleichtet
     // IntelliSense bei der Verwendung von TypeScript.
     ngOnInit(): void {
-        this._observeFile();
+        this._observeArtikels();
         this._observeError();
     }
 
     /**
-     * Methode, um den injizierten <code>BuecherService</code> zu beobachten,
+     * Methode, um den injizierten <code>ArtikelsService</code> zu beobachten,
      * ob es gefundene bzw. darzustellende B&uuml;cher gibt, die in der
-     * Kindkomponente f&uuml;r das Tag <code>gefundene-buecher</code>
+     * Kindkomponente f&uuml;r das Tag <code>gefundene-artikels</code>
      * dargestellt werden. Diese private Methode wird in der Methode
      * <code>ngOnInit</code> aufgerufen.
      */
     /* tslint:disable:align */
-    private _observeFile(): void {
+    private _observeArtikels(): void {
         // Funktion als Funktionsargument, d.h. Code als Daten uebergeben
-        this._kundenService.observeFile((file: File) => {
+        this._artikelsService.observeArtikels((artikels: Array<Artikel>) => {
             // zuruecksetzen
             this.waiting = false;
             this.errorMsg = null;
 
-            this.file = file;
-            console.log('SuchErgebnis.file:', this.file);
+            this.artikels = artikels;
+            console.log('SuchErgebnis.artikels:', this.artikels);
         }, this);
     }
 
     /**
-     * Methode, um den injizierten <code>BuecherService</code> zu beobachten,
+     * Methode, um den injizierten <code>ArtikelsService</code> zu beobachten,
      * ob es bei der Suche Fehler gibt, die in der Kindkomponente f&uuml;r das
      * Tag <code>error-message</code> dargestellt werden. Diese private Methode
      * wird in der Methode <code>ngOnInit</code> aufgerufen.
      */
     private _observeError(): void {
-        this._kundenService.observeError((err: string | number) => {
+        this._artikelsService.observeError((err: string | number) => {
             // zuruecksetzen
             this.waiting = false;
-            this.file = null;
+            this.artikels = null;
 
             if (err === null) {
                 this.errorMsg = 'Ein Fehler ist aufgetreten.';
@@ -116,7 +116,7 @@ export default class SuchErgebnis implements OnInit {
 
             switch (err) {
                 case 404:
-                    this.errorMsg = 'Keine Datei gefunden.';
+                    this.errorMsg = 'Keine Artikel gefunden.';
                     break;
                 default:
                     this.errorMsg = 'Ein Fehler ist aufgetreten.';

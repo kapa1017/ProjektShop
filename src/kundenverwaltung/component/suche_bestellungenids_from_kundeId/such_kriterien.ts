@@ -20,6 +20,7 @@ import {Component, Output, EventEmitter} from 'angular2/core';
 // "common" enthaelt Direktiven (z.B. ngFor, ngIf), Form Controls und Pipes
 import {CORE_DIRECTIVES} from 'angular2/common';
 import KundenService from '../../service/kunden_service';
+import {log, isEmpty} from '../../../shared/shared';
 
 /**
  * Komponente f&uuml;r das Tag <code>such-kriterien</code>
@@ -54,7 +55,7 @@ import KundenService from '../../service/kunden_service';
                      form-group, row, form-control-label, btn, ...
                      http://v4-alpha.getbootstrap.com/components/forms -->
 
-                <form (submit)="fileDownloadwithBase64byID()" role="form">
+                <form (submit)="findBestellungIds()" role="form">
                     <div class="form-group row">
                         <label for="idInput"
                                class="col-sm-2 form-control-label">KundenId</label>
@@ -66,7 +67,14 @@ import KundenService from '../../service/kunden_service';
                                 [(ngModel)]="id">
                         </div>
                     </div>
-                         
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <i class="fa fa-info-circle"></i>
+                            Hinweis: Keine Eingabe liefert keine BestellungId
+                        </div>
+                    </div>
+                      
                     <div class="form-group row">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button class="btn btn-primary"><i class="fa fa-search"></i>
@@ -80,6 +88,7 @@ import KundenService from '../../service/kunden_service';
 })
 export default class SuchKriterien {
     id: string = null;
+
     // Event Binding: <such-kriterien (waiting)="...">
     // siehe OutputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
@@ -89,11 +98,21 @@ export default class SuchKriterien {
     constructor(private _kundenService: KundenService) {
         console.log('SuchKriterien.constructor()');
     }
-    fileDownloadwithBase64byID(): boolean {
-        console.log('kundeId=', this.id);
 
-        this.waiting.emit(true);
-        this._kundenService.fileDownloadwithBase64byID(this.id);
+    /**
+     * Suche nach B&uuml;chern, die den spezfizierten Suchkriterien entsprechen
+     * @param suchkriterien: Suchkriterien vom Typ IBuchForm
+     * @return false, um das durch den Button-Klick ausgel&ouml;ste Ereignis
+     *         zu konsumieren.
+     */
+    @log
+    findBestellungIds(): boolean {
+        console.log('kundeId=', this.id);
+        if (!isEmpty(this.id)) {
+            this.waiting.emit(true);
+        }
+        this._kundenService.findBestellungIdsBykundeId(this.id);
+
         // Inspektion der Komponente mit dem Tag-Namen "app" im Debugger
         // Voraussetzung: globale Variable ng deklarieren (s.o.)
         // const app: any = document.querySelector('app');

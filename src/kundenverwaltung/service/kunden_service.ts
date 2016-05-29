@@ -60,10 +60,11 @@ export default class KundenService extends AbstractKundenService {
         new EventEmitter<Array<Kunde>>();
     private _kundeEmitter: EventEmitter<Kunde> = new EventEmitter<Kunde>();
     private _fileEmitter: EventEmitter<File> = new EventEmitter<File>();
+    private _bestellungenIdsEmitter: EventEmitter<Array<string>> =
+        new EventEmitter<Array<string>>();
     private _errorEmitter: EventEmitter<string|number> =
         new EventEmitter<string|number>();
     private _kunde: Kunde = null;
-    private _file: File = null;
 
     /**
      * @param _chartService injizierter ChartService
@@ -108,7 +109,11 @@ export default class KundenService extends AbstractKundenService {
     observeError(observerFn: (err: string|number) => void, thisArg: any): void {
         this._errorEmitter.forEach(observerFn, thisArg);
     }
-
+    observeBestellungenIds(
+        observerFn: (bestellungenIds: Array<string>) => void,
+        thisArg: any): void {
+        this._bestellungenIdsEmitter.forEach(observerFn, thisArg);
+    }
     /**
      * Buecher suchen
      * @param suchkriterien Die Suchkriterien
@@ -234,6 +239,53 @@ export default class KundenService extends AbstractKundenService {
 
         this._http.get(uri, options).subscribe(nextFn, errorFn);
     }
+    /**
+     * Buecher suchen
+     * @param suchkriterien Die Suchkriterien
+     */
+    @log
+    findBestellungIdsBykundeId(kundeId: string): void {
+        if (isBlank(kundeId)) {
+            return;
+        }
+        const uri: string = `${this._baseUriKunden}/${kundeId}/bestellungenIds`;
+        console.log(`KundenService.find(): uri=${uri}`);
+        const headers: Headers =
+            new Headers({'Content-Type': 'application/json'});
+        headers.append('Authorization', getAuthorization());
+        // RequestOptionsArgs in
+        // node_modules\angular2\ts\src\http\interfaces.ts
+        const options: RequestOptionsArgs = {headers: headers};
+        console.log('options=', options);
+
+        const nextFn: ((response: Response) => void) = (response: Response) => {
+            console.log('KundenService.findBestellungIdsBykundeId(): nextFn()');
+            let bestellungenIds: Array<string> = <Array<string>>response.json();
+            // let bestellungenIds: Array<string> =
+            // this._responseToArraystring(response);
+            this._bestellungenIdsEmitter.emit(bestellungenIds);
+        };
+        const errorFn: (err: Response) => void = (err: Response) => {
+            const status: number = err.status;
+            console.log(
+                `KundenService.findBestellungIdsBykundeId(): errorFn(): ${status}`);
+            if (status === 400) {
+                const body: string = err.text();
+                if (isBlank(body)) {
+                    this._errorEmitter.emit(status);
+                } else {
+                    // z.B. [PARAMETER][findByTitel.titel][Bei einem ...][x]
+                    let errorMsg: string = body.split('[')[3];
+                    errorMsg = errorMsg.substr(0, errorMsg.length - 2);
+                    this._errorEmitter.emit(errorMsg);
+                }
+            } else {
+                this._errorEmitter.emit(status);
+            }
+        };
+
+        this._http.get(uri, options).subscribe(nextFn, errorFn);
+    }
 
     /**
      * Ein vorhandenes Buch aktualisieren
@@ -334,77 +386,6 @@ export default class KundenService extends AbstractKundenService {
 
 
         this._http.delete(uri, options).subscribe(nextFn, errorFnDelete);
-    }
-    /**
-     * Buecher suchen
-     * @param suchkriterien Die Suchkriterien
-     */
-    @log
-    fileUploadwithBase64byID(
-        kundeId: string, base64: string, successFn: (location: string) => void,
-        errorFn: (status: number, text: string) => void): void {
-        if (isBlank(kundeId)) {
-            return;
-        }
-        const uri: string = `${this._baseUriKunden}/base64/${kundeId}`;
-        console.log(`KundenService.fileUploadwithBase64byID(): uri=${uri}`);
-        const body: string = `${base64}`;
-        console.log(`KundenService.fileUploadwithBase64byID(): body=${body}`);
-        const headers: Headers = new Headers({'Content-Type': 'text/plain'});
-        headers.append('Authorization', getAuthorization());
-        // headers.append('Content-Transfer-Encoding', 'base64');
-        // RequestOptionsArgs in
-        // node_modules\angular2\ts\src\http\interfaces.ts
-        const options: RequestOptionsArgs = {headers: headers};
-        console.log('options=', options);
-
-        const nextFn: ((response: Response) => void) = (response: Response) => {
-            if (response.status === 201) {
-                // TODO Das Response-Objekt enthaelt im Header NICHT "Location"
-                successFn(null);
-                return;
-            }
-        };
-        // async. Error-Callback statt sync. try/catch
-        const errorFnPost: ((errResponse: Response) => void) =
-            (errResponse: Response) => {
-                if (isPresent(errorFn)) {
-                    errorFn(errResponse.status, errResponse.text());
-                }
-            };
-
-        this._http.post(uri, body, options).subscribe(nextFn, errorFnPost);
-    }
-    /**
-     * Buecher suchen
-     * @param suchkriterien Die Suchkriterien
-     */
-    @log
-    fileDownloadwithBase64byID(kundeId: string): void {
-        if (isBlank(kundeId)) {
-            return;
-        }
-        const uri: string = `${this._baseUriKunden}/base64/${kundeId}`;
-        console.log(`KundenService.fileDownloadwithBase64byID(): uri=${uri}`);
-        const headers: Headers = new Headers({'Content-Type': 'text/plain'});
-        headers.append('Authorization', getAuthorization());
-        // RequestOptionsArgs in
-        // node_modules\angular2\ts\src\http\interfaces.ts
-        const options: RequestOptionsArgs = {headers: headers};
-        console.log('options=', options);
-
-        const nextFn: ((response: Response) => void) = (response: Response) => {
-            this._file = this._responseToFile(response);  // ankommende Bytes
-            this._fileEmitter.emit(this._file);
-        };
-        const errorFn: (err: Response) => void = (err: Response) => {
-            const status: number = err.status;
-            console.log(
-                `KundenService.fileDownloadwithBase64byID(): errorFn(): ${status}`);
-            this._errorEmitter.emit(status);
-        };
-
-        this._http.get(uri, options).subscribe(nextFn, errorFn);
     }
 
     // http://www.sitepoint.com/15-best-javascript-charting-libraries
@@ -578,6 +559,10 @@ export default class KundenService extends AbstractKundenService {
                 return KundeBestellungenGesamtbetrag.fromServer(jsonObjekt);
             });
     }
+    /*private _responseToArraystring(response: Response): Array<string> {
+        const jsonArray: Array<string> = <Array<string>>(response.json());
+        return jsonArray.map((jsonObjekt: string) => { return jsonObjekt; });
+    }*/
 
     /**
      * Ein Response-Objekt in ein Buch-Objekt konvertieren.
@@ -587,22 +572,6 @@ export default class KundenService extends AbstractKundenService {
     private _responseToKunde(response: Response): Kunde {
         const jsonObjekt: IKundeServer = <IKundeServer>(response.json());
         return Kunde.fromServer(jsonObjekt);
-    }
-    /**
-     * Ein Response-Objekt in ein Buch-Objekt konvertieren.
-     * @param response Response-Objekt eines GET-Requests.
-     */
-    @log
-    private _responseToFile(response: Response): File {
-        // Ein Objekt um Dateien einzulesen
-        const filename: string = null;
-        const senddata: File = new File(response.blob(), filename);
-        return senddata;
-        /*const reader: FileReader = new FileReader();
-        const dataurl: void = reader.readAsDataURL(response.blob();
-        const senddata: File = new File(reader.readAsText(response.blob()),
-        filename);
-        console.log('dataurl=', dataurl);*/
     }
 
     /**
@@ -621,8 +590,8 @@ export default class KundenService extends AbstractKundenService {
                 kundebestellungengesamtbetrag.kunde.id);
         const datasets: Array<ChartDataSet> = [{
             label: 'KundeBestellungenGesamtbetraege',
-            fillColor: 'rgba(220,220,220,0.2)',
-            strokeColor: 'rgba(220,220,220,1)',
+            fillColor: 'rgba(190,214,248,0.2)',
+            strokeColor: 'rgba(0,0,0,1)',
             data: kundebestellungengesamtbetraege.map(
                 (kundebestellungengesamtbetrag:
                      KundeBestellungenGesamtbetrag) =>
@@ -654,8 +623,8 @@ export default class KundenService extends AbstractKundenService {
                 kundebestellungengesamtbetrag.kunde.id);
         const datasets: Array<ChartDataSet> = [{
             label: 'KundeBestellungenGesamtbetraege',
-            fillColor: 'rgba(220,220,220,0.2)',
-            strokeColor: 'rgba(220,220,220,1)',
+            fillColor: 'rgba(190,214,248,0.2)',
+            strokeColor: 'rgba(0,0,0,1)',
             data: kundebestellungengesamtbetraege.map(
                 (kundebestellungengesamtbetrag:
                      KundeBestellungenGesamtbetrag) =>

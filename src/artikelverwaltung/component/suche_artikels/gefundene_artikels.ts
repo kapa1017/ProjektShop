@@ -21,8 +21,8 @@ import {Component, Input} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {Router} from 'angular2/router';
 
-import KundenService from '../../service/kunden_service';
-import Kunde from '../../model/kunde';
+import ArtikelsService from '../../service/artikels_service';
+import Artikel from '../../model/artikel';
 import APP_ROUTES from '../../../app/routes';
 import {log} from '../../../shared/shared';
 
@@ -30,23 +30,23 @@ import {log} from '../../../shared/shared';
  * Komponente f&uuml;r das Tag <code>gefundene-bueche</code>
  */
 @Component({
-    selector: 'gefundene-kunden',
+    selector: 'gefundene-artikels',
     directives: [CORE_DIRECTIVES],
     template: `
         <!-- Template Binding durch die Direktive ngIf -->
         <!-- Eine Direktive ist eine Komponente ohne View -->
-        <div class="card" *ngIf="kunden != null">
+        <div class="card" *ngIf="artikels != null">
             <div class="card-header">
-                <h4><i class="fa fa-folder-open-o"></i> Gefundene Kunden</h4>
+                <h4><i class="fa fa-folder-open-o"></i> Gefundene B&uuml;cher</h4>
             </div>
             <div class="card-block">
                 <table class="table table-striped table-hover table-responsive">
                     <thead>
                         <th>Nr.</th>
-                        <th>KundenId</th>
-                        <th>Vorname</th>
-                        <th>Nachname</th>
-                        <th>Umsatz</th>
+                        <th>ID</th>
+                        <th>Bezeichnung</th>
+                        <th>Lieferant</th>
+                        <th>Schlagw&ouml;rter</th>
                         <th>
                             <span class="sr-only">
                                 Spalte f&uuml;r Details
@@ -61,23 +61,40 @@ import {log} from '../../../shared/shared';
                     <tbody>
                         <!-- Template Binding: ngFor -->
                         <!-- Event-Binding: statt (click) auch on-click -->
-                        <tr *ngFor="#k of kunden; #i = index" (click)="details(k)">
+                        <tr *ngFor="#b of artikels; #i = index" (click)="details(b)">
                             <td>{{i + 1}}</td>
-                            <td>{{k.id}}</td>
-                            <td>{{k.identity.vorname}}</td>
-                            <td>{{k.identity.nachname}}</td>
-                            <td>{{k.umsatz}}</td>
+                            <td>{{b._id}}</td>
+                            <td>{{b.bezeichnung}}</td>
                             <td>
-                                <!-- Pfad /detailsBuch/:id, @RouteConfig in app.ts -->
+                                <span [ngSwitch]="b.lieferant">
+                                    <span *ngSwitchWhen="'EBAY'">O'Reilly</span>
+                                    <span *ngSwitchWhen="'AMAZON'">Packt</span>
+                                    <span *ngSwitchDefault>unbekannt</span>
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngFor="#sw of b.schlagwoerter">
+                                    <span [ngSwitch]="sw">
+                                        <span *ngSwitchWhen="'SCHNULZE'">
+                                            Schnulze<br>
+                                        </span>
+                                        <span *ngSwitchWhen="'SCIENCE_FICTION'">
+                                            Sc. Fiction
+                                        </span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <!-- Pfad /detailsArtikel/:id, @RouteConfig in app.ts -->
                                 <!-- modaler Dialog als Alternative: -->
                                 <!-- http://v4-alpha.getbootstrap.com/components/modal -->
-                                <a [routerLink]="['DetailsKunde', {'id': k.id}]"
+                                <a [routerLink]="['DetailsArtikel', {'id': b._id}]"
                                    data-toggle="tooltip" title="Details anzeigen">
                                     <i class="fa fa-search-plus"></i>
                                 </a>
                             </td>
                             <td>
-                                <a (click)="remove(k)" data-toggle="tooltip"
+                                <a (click)="remove(b)" data-toggle="tooltip"
                                    title="Entfernen">
                                     <i class="fa fa-remove"></i>
                                 </a>
@@ -86,49 +103,57 @@ import {log} from '../../../shared/shared';
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+                <i class="fa fa-info-circle"></i>
+                Zur Anzeige der JSON-Datens&auml;tze in gefundene_artikels.ts
+                den Kommentar beim Tag &lt;pre&gt; entfernen
+            </div>
         </div>
 
         <!-- Ausgabe des JSON-Datensatzes im Webbrowser statt console.log(...) -->
         <!--
-        <pre *ngIf="kunden != null">{{kunden | json}}</pre>
+        <pre *ngIf="artikels != null">{{artikels | json}}</pre>
         -->
     `
 })
-export default class GefundeneKunden {
-    // Property Binding: <gefundene-buecher [buecher]="...">
+export default class GefundeneArtikels {
+    // Property Binding: <gefundene-artikels [artikels]="...">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
-    @Input() kunden: Array<Kunde>;
+    @Input() artikels: Array<Artikel>;
 
     constructor(
-        private _kundenService: KundenService, private _router: Router) {
-        console.log('GefundeneKunden.constructor()');
+        private _artikelsService: ArtikelsService, private _router: Router) {
+        console.log('GefundeneArtikels.constructor()');
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Buch in der Detailsseite anzeigen.
-     * @param buch Das ausgew&auml;hlte Buch
+     * Das ausgew&auml;hlte bzw. angeklickte Artikel in der Detailsseite
+     * anzeigen.
+     * @param artikel Das ausgew&auml;hlte Artikel
      */
     @log
-    details(kunde: Kunde): void {
-        console.log(`detailsKundeDef.name=${APP_ROUTES.detailsKundeDef.name}`);
-        console.log(`id=${kunde.id}`);
+    details(artikel: Artikel): void {
+        console.log(
+            `detailsArtikelDef.name=${APP_ROUTES.detailsArtikelDef.name}`);
+        console.log(`id=${artikel._id}`);
         this._router.navigate(
-            [APP_ROUTES.detailsKundeDef.name, {id: kunde.id}]);
+            [APP_ROUTES.detailsArtikelDef.name, {id: artikel._id}]);
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Buch l&ouml;schen.
-     * @param buch Das ausgew&auml;hlte Buch
+     * Das ausgew&auml;hlte bzw. angeklickte Artikel l&ouml;schen.
+     * @param artikel Das ausgew&auml;hlte Artikel
      */
     @log
-    remove(kunde: Kunde): void {
+    remove(artikel: Artikel): void {
         const errorFn: (status: number) => void = (status: number): void => {
             console.error(`Fehler beim Loeschen: status=${status}`);
         };
-        this._kundenService.remove(kunde, null, errorFn);
-        this.kunden = this.kunden.filter((k: Kunde) => k.id !== kunde.id);
+        this._artikelsService.remove(artikel, null, errorFn);
+        this.artikels =
+            this.artikels.filter((b: Artikel) => b._id !== artikel._id);
     }
 
-    toString(): String { return 'GefundeneKunden'; }
+    toString(): String { return 'GefundeneArtikels'; }
 }
