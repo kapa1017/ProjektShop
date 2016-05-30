@@ -27,7 +27,8 @@ import {isAdmin} from '../../../iam/iam';
 import {isString, ErrorMessage} from '../../../shared/shared';
 
 /**
- * Komponente f&uuml;r das Tag <code>update-buch</code> mit Kindkomponenten
+ * Komponente f&uuml;r das Tag <code>update-kunde-privat</code> mit
+ * Kindkomponenten
  * f&uuml;r die folgenden Tags:
  * <ul>
  *  <li> <code>stammdaten</code>
@@ -78,21 +79,21 @@ export default class UpdatePrivatkunde implements OnInit {
     }
 
     /**
-     * Die Beobachtung starten, ob es ein zu aktualisierendes Buch oder einen
+     * Die Beobachtung starten, ob es ein zu aktualisierendes Kunden oder einen
      * Fehler gibt.
      */
     ngOnInit(): void {
         this._observeKunde();
         this._observeError();
 
-        // Pfad-Parameter aus /updateBuch/:id
+        // Pfad-Parameter aus /updatePrivatkunde/:id
         const id: string = this._routeParams.params['id'];
         console.log(`UpdatePrivatkunde.ngOnInit(): kundeId=${id}`);
         this._kundeService.findById(id);
     }
 
     /**
-     * Beobachten, ob es ein zu aktualisierendes Buch gibt.
+     * Beobachten, ob es ein zu aktualisierendes Kunde gibt.
      */
     /* tslint:disable:align */
     private _observeKunde(): void {

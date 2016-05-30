@@ -27,9 +27,9 @@ export default class KundeValidator {
     // Rueckgabewert null bedeutet valid
 
     /**
-     * Validierung, ob der Titel eines Buches plausibel ist.
+     * Validierung, ob der Nachname eines Kunden plausibel ist.
      * @param control Das Control-Objekt innerhalb eines Formulars
-     * @return null, wenn der Buchtitel valide ist. Ansonsten ein JSON-Objekt
+     * @return null, wenn der Kundennachname valide ist. Ansonsten ein JSON-Objekt
      *         mit den Verst&ouml;&szlig;en.
      */
     static nachname(control: Control): {[key: string]: boolean} {

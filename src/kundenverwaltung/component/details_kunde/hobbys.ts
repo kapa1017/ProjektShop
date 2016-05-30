@@ -19,7 +19,7 @@ import {Component, Input, OnInit} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 
 /**
- * Komponente f&uuml;r das Tag <code>schlagwoerter</code>
+ * Komponente f&uuml;r das Tag <code>hobbys</code>
  */
 @Component({
     selector: 'hobbys',
@@ -40,7 +40,7 @@ import {CORE_DIRECTIVES} from 'angular2/common';
     `
 })
 export default class Hobbys implements OnInit {
-    // <schlagwoerter [values]="buch.schlagwoerter">
+    // <hobbys [values]="kunde.hobbys">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input('values') hobbys: Array<string>;

@@ -34,8 +34,9 @@ export interface IKundeBestellungenGesamtbetragForm extends
  * Functions fuer Abfragen und Aenderungen.
  */
 export default class KundeBestellungenGesamtbetrag {
-    // wird i.a. nicht direkt aufgerufen, sondern Buch.fromServer oder
-    // Buch.fromForm
+    // wird i.a. nicht direkt aufgerufen, sondern
+    // KundeBestellungenGesamtbetrag.fromServer oder
+    // KundeBestellungenGesamtbetrag.fromForm
     constructor(
         public kunde: IKundeServer, public bestellungenGesamtbetrag: number) {
         this.kunde = kunde || null;
@@ -43,10 +44,10 @@ export default class KundeBestellungenGesamtbetrag {
     }
 
     /**
-     * Ein Buch-Objekt mit JSON-Daten erzeugen, die von einem RESTful Web
+     * Ein KundeBestellungenGesamtbetrag-Objekt mit JSON-Daten erzeugen, die von einem RESTful Web
      * Service kommen.
-     * @param buch JSON-Objekt mit Daten vom RESTful Web Server
-     * @return Das initialisierte Buch-Objekt
+     * @param kundeBestellungenGesamtbetrag JSON-Objekt mit Daten vom RESTful Web Server
+     * @return Das initialisierte KundeBestellungenGesamtbetrag-Objekt
      */
     static fromServer(kundebestellungengesamtbetragServer:
                           IKundeBestellungenGesamtbetragServer):
@@ -61,9 +62,9 @@ export default class KundeBestellungenGesamtbetrag {
         return kundebestellungengesamtbetrag;
     }
     /**
-     * Ein Buch-Objekt mit JSON-Daten erzeugen, die von einem Formular kommen.
+     * Ein KundeBestellungenGesamtbetrag-Objekt mit JSON-Daten erzeugen, die von einem Formular kommen.
      * @param JSON-Objekt mit Daten vom Formular
-     * @return Das initialisierte Buch-Objekt
+     * @return Das initialisierte KundeBestellungenGesamtbetrag-Objekt
      */
     static fromForm(kundebestellungengesamtbetragForm:
                         IKundeBestellungenGesamtbetragForm):
@@ -79,7 +80,7 @@ export default class KundeBestellungenGesamtbetrag {
         return kundebestellungengesamtbetrag;
     }
     /**
-     * Konvertierung des Buchobjektes in ein JSON-Objekt f&uuml;r den RESTful
+     * Konvertierung des KundeBestellungenGesamtbetragobjektes in ein JSON-Objekt f&uuml;r den RESTful
      * Web Service.
      * @return Das JSON-Objekt f&uuml;r den RESTful Web Service
      */
