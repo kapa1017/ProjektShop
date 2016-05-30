@@ -59,7 +59,6 @@ export default class KundenService extends AbstractKundenService {
     private _kundenEmitter: EventEmitter<Array<Kunde>> =
         new EventEmitter<Array<Kunde>>();
     private _kundeEmitter: EventEmitter<Kunde> = new EventEmitter<Kunde>();
-    private _fileEmitter: EventEmitter<File> = new EventEmitter<File>();
     private _bestellungenIdsEmitter: EventEmitter<Array<string>> =
         new EventEmitter<Array<string>>();
     private _errorEmitter: EventEmitter<string|number> =
@@ -99,10 +98,6 @@ export default class KundenService extends AbstractKundenService {
     @log
     observeKunde(observerFn: (kunde: Kunde) => void, thisArg: any): void {
         this._kundeEmitter.forEach(observerFn, thisArg);
-    }
-    @log
-    observeFile(observerFn: (file: File) => void, thisArg: any): void {
-        this._fileEmitter.forEach(observerFn, thisArg);
     }
 
     @log
