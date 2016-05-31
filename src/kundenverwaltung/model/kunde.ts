@@ -28,8 +28,6 @@ import {isPresent} from '../../shared/shared';
 import {Moment} from 'moment';
 import * as moment_ from 'moment';
 const moment: (date: string) => Moment = (<any>moment_)['default'];
-// import {IIdentityShared} from './identity';
-// import Identity from './identity';
 
 const MIN_KATEGORIE: number = 0;
 const MAX_KATEGORIE: number = 5;
@@ -51,7 +49,7 @@ export interface IIdentity {
 }
 
 /**
- * Gemeinsame Datenfelder unabh&auml;ngig, ob die Buchdaten von einem Server
+ * Gemeinsame Datenfelder unabh&auml;ngig, ob die Kundendaten von einem Server
  * (z.B. RESTful Web Service) oder von einem Formular kommen.
  */
 export interface IKundeShared {
@@ -80,7 +78,6 @@ export interface IKundeServer extends IKundeShared {
     kategorie: number;
     rabatt: number;
     umsatz: number;
-    // familienstand?: 'VERHEIRATET'|'LEDIG'|'GESCHIEDEN'|'VERWITWET';
     hobbys?: Array<string>;
 }
 
@@ -98,12 +95,6 @@ export interface IKundeForm extends IKundeShared {
     nachname: string;
     rabatt: string;
     umsatz: string;
-    /* verheiratet?: RadioButtonState;
-    ledig?: RadioButtonState;
-    geschieden?: RadioButtonState;
-    verwitwet?: RadioButtonState;*/
-    /*maennlich: RadioButtonState;
-    weiblich: RadioButtonState;*/
     sport?: boolean;
     lesen?: boolean;
     reisen?: boolean;
@@ -114,10 +105,9 @@ export interface IKundeForm extends IKundeShared {
  * Functions fuer Abfragen und Aenderungen.
  */
 export default class Kunde {
-    // identity: Identity = new Identity(null, null,null, null, null, null);
     public kategorieArray: Array<boolean> = [];
-    // wird i.a. nicht direkt aufgerufen, sondern Buch.fromServer oder
-    // Buch.fromForm
+    // wird i.a. nicht direkt aufgerufen, sondern Kunde.fromServer oder
+    // Kunde.fromForm
     constructor(
         public id: string, public identity: IIdentity, public kategorie: number,
         public rabatt: number, public umsatz: number, public seit: Moment,
@@ -149,10 +139,10 @@ export default class Kunde {
     }
 
     /**
-     * Ein Buch-Objekt mit JSON-Daten erzeugen, die von einem RESTful Web
+     * Ein Kunde-Objekt mit JSON-Daten erzeugen, die von einem RESTful Web
      * Service kommen.
-     * @param buch JSON-Objekt mit Daten vom RESTful Web Server
-     * @return Das initialisierte Buch-Objekt
+     * @param kunde JSON-Objekt mit Daten vom RESTful Web Server
+     * @return Das initialisierte Kunde-Objekt
      */
     static fromServer(kundeServer: IKundeServer): Kunde {
         const kunde: Kunde = new Kunde(
@@ -162,7 +152,6 @@ export default class Kunde {
             kundeServer.bemerkungen, kundeServer.bestellungenUri,
             kundeServer.geschlecht, kundeServer.typ, kundeServer.familienstand,
             kundeServer.hobbys);
-        // kundeServer.familienstand
         console.log('Kunde.fromServer(): kunde=', kunde);
         return kunde;
     }
@@ -173,8 +162,6 @@ export default class Kunde {
      */
     static fromForm(kundeForm: IKundeForm): Kunde {
         const typ: 'P'|'F' = kundeForm.p.checked ? 'P' : 'F';
-        /*const geschlecht: 'MAENNLICH'|'WEIBLICH' =
-            kundeForm.maennlich.checked ? 'MAENNLICH' : 'WEIBLICH';*/
         const hobbys: Array<string> = [];
         if (kundeForm.sport) {
             hobbys.push('SPORT');
@@ -192,30 +179,15 @@ export default class Kunde {
             null, kundeForm.newsletter, kundeForm.agbAkzeptiert,
             kundeForm.bemerkungen, kundeForm.bestellungenUri,
             kundeForm.geschlecht, typ, null, hobbys);
-        // familienstand
         console.log('Kunde.fromForm(): kunde=', kunde);
         return kunde;
-        // kundeForm.loginname, kundeForm.kategorie,kundeForm.newsletter,
-        // kundeForm.agbAkzeptiert
     }
     // http://momentjs.com
     get datumFormatted(): string { return this.seit.format('Do MMM YYYY'); }
 
     get datumFromNow(): string { return this.seit.fromNow(); }
-
     /**
-     * Abfrage, ob im Buchtitel der angegebene Teilstring enthalten ist. Dabei
-     * wird nicht auf Gross-/Kleinschreibung geachtet.
-     * @param titel Zu &uuml;berpr&uuml;fender Teilstring
-     * @return true, falls der Teilstring im Buchtitel enthalten ist. Sonst
-     *         false.
-     */
-    containsLoginname(nachname: string): boolean {
-        return this.identity.nachname.toLowerCase().includes(
-            nachname.toLowerCase());
-    }
-    /**
-     * Die Bewertung ("rating") des Buches um 1 erh&ouml;hen
+     * Die Bewertung ("kategorie") des Kunden um 1 erh&ouml;hen
      */
     rateUp(): void {
         if (this.kategorie < MAX_KATEGORIE) {
@@ -224,43 +196,18 @@ export default class Kunde {
     }
 
     /**
-     * Die Bewertung ("rating") des Buches um 1 erniedrigen
+     * Die Bewertung ("kategorie") des Kunden um 1 erniedrigen
      */
     rateDown(): void {
         if (this.kategorie > MIN_KATEGORIE) {
             this.kategorie--;
         }
     }
-    /**
-     * Abfrage, ob es zum Buch das angegebene Schlagwort gibt.
-     * @param schlagwort das zu &uuml;berpr&uuml;fende Schlagwort
-     * @return true, falls es das Schlagwort gibt. Sonst false.
-     */
-    isKunde_seit(seit: string): boolean {
-        return this.seit === moment(seit);
-        // this.seit.find((s: string) => s === seit) !== undefined;
-    }
     isPrivat(): boolean {
         if (this.typ === 'P') {
             return true;
         }
     }
-    /**
-     * Abfrage, ob es zum Buch auch Schlagw&ouml;rter gibt.
-     * @return true, falls es mindestens ein Schlagwort gibt. Sonst false.
-     */
-    hasGeschlecht(geschlecht: string): boolean {
-        return this.geschlecht === geschlecht;
-    }
-    /**
-     * Aktualisierung der Stammdaten des Buch-Objekts.
-     * @param titel Der neue Buchtitel
-     * @param rating Die neue Bewertung
-     * @param art Die neue Buchart (DRUCKAUSGABE oder KINDLE)
-     * @param verlag Der neue Verlag
-     * @param preis Der neue Preis
-     * @param rabatt Der neue Rabatt
-     */
     updateStammdaten(
         nachname: string, kategorie: number, newsletter: boolean,
         rabatt: number, umsatz: number, agbAkzeptiert: boolean,
@@ -273,15 +220,6 @@ export default class Kunde {
         this.agbAkzeptiert = agbAkzeptiert;
         this.bemerkungen = bemerkungen;
     }
-    /**
-     * Aktualisierung der Stammdaten des Buch-Objekts.
-     * @param titel Der neue Buchtitel
-     * @param rating Die neue Bewertung
-     * @param art Die neue Buchart (DRUCKAUSGABE oder KINDLE)
-     * @param verlag Der neue Verlag
-     * @param preis Der neue Preis
-     * @param rabatt Der neue Rabatt
-     */
     updateStammdatenPrivat(
         nachname: string, kategorie: number, newsletter: boolean,
         rabatt: number, umsatz: number, agbAkzeptiert: boolean,
@@ -298,7 +236,7 @@ export default class Kunde {
     // Überprüft ob Hobbys
     hasHobbys(): boolean { return this.hobbys.length !== 0; }
     /**
-     * Konvertierung des Buchobjektes in ein JSON-Objekt f&uuml;r den RESTful
+     * Konvertierung des Kundenobjektes in ein JSON-Objekt f&uuml;r den RESTful
      * Web Service.
      * @return Das JSON-Objekt f&uuml;r den RESTful Web Service
      */

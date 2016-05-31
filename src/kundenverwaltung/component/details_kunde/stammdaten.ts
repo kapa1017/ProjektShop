@@ -27,7 +27,7 @@ import Kunde from '../../model/kunde';
     selector: 'stammdaten',
     directives: [CORE_DIRECTIVES],
     // siehe @Input in der Komponenten-Klasse
-    // inputs: ['buch'],
+    // inputs: ['kunde'],
     template: `
         <table class="table table-stripped table-hover table-responsive">
             <tbody>
@@ -122,7 +122,7 @@ import Kunde from '../../model/kunde';
     `
 })
 export default class Stammdaten implements OnInit {
-    // Property Binding: <stammdaten [buch]="...">
+    // Property Binding: <stammdaten [kunde]="...">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input() kunde: Kunde;

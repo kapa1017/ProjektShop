@@ -24,7 +24,7 @@ import {Router} from 'angular2/router';
 import KundenService from '../../service/kunden_service';
 
 /**
- * Komponente f&uuml;r das Tag <code>gefundene-bueche</code>
+ * Komponente f&uuml;r das Tag <code>gefundene-bestellungenids</code>
  */
 @Component({
     selector: 'gefundene-bestellungenids',
@@ -56,7 +56,7 @@ import KundenService from '../../service/kunden_service';
     `
 })
 export default class GefundeneBestellungenids {
-    // Property Binding: <gefundene-buecher [buecher]="...">
+    // Property Binding: <gefundene-bestellungenids [bestellungenids]="...">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input() bestellungenIds: Array<String>;

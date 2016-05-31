@@ -28,7 +28,7 @@ import {isAdmin} from '../../../iam/iam';
 import {isString, Waiting, ErrorMessage} from '../../../shared/shared';
 
 /**
- * Komponente f&uuml;r das Tag <code>details-buch</code>
+ * Komponente f&uuml;r das Tag <code>details-kunde</code>
  */
 @Component({
     selector: 'details-kunde',
@@ -108,7 +108,7 @@ export default class DetailsKunde implements OnInit {
         this._observeKunde();
         this._observeError();
 
-        // Pfad-Parameter aus /detailsBuch/:_id
+        // Pfad-Parameter aus /detailsKunde/:_id
         const id: string = this._routeParams.params['id'];
         console.log(`DetailsKunde.ngOnInit(): id= ${id}`);
         this._kundenService.findById(id);

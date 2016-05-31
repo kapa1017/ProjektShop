@@ -30,8 +30,6 @@ import {IChart, ChartDataSet, LinearChartData, CircularChartData} from 'chart.js
 import Kunde from '../model/kunde';
 import KundeBestellungenGesamtbetrag from '../model/kundebestellungengesamtbetrag';
 import {IKundeServer, IKundeForm} from '../model/kunde';
-// import {IFileShared} from '../model/file';
-// import File from '../model/file';
 import {IKundeBestellungenGesamtbetragServer} from '../model/kundebestellungengesamtbetrag';
 import AbstractKundenService from './abstract_kunden_service';
 import {ChartService, BASE_URI, PATH_KUNDEN, isBlank, isPresent, isEmpty, log} from '../../shared/shared';
@@ -80,8 +78,8 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein Buch-Objekt puffern.
-     * @param buch Das Buch-Objekt, das gepuffert wird.
+     * Ein Kunde-Objekt puffern.
+     * @param kunde Das Kunde-Objekt, das gepuffert wird.
      * @return void
      */
     set kunde(kunde: Kunde) {
@@ -110,7 +108,7 @@ export default class KundenService extends AbstractKundenService {
         this._bestellungenIdsEmitter.forEach(observerFn, thisArg);
     }
     /**
-     * Buecher suchen
+     * Kunden suchen
      * @param suchkriterien Die Suchkriterien
      */
     @log
@@ -156,12 +154,12 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein Buch anhand der ID suchen
-     * @param id Die ID des gesuchten Buchs
+     * Ein Kunde anhand der ID suchen
+     * @param id Die ID des gesuchten Kunden
      */
     @log
     findById(kundeId: string): void {
-        // Gibt es ein gepuffertes Buch mit der gesuchten ID?
+        // Gibt es ein gepuffertes Kunde mit der gesuchten ID?
         if (isPresent(this._kunde) && this._kunde.id === kundeId) {
             this._kundeEmitter.emit(this._kunde);
             return;
@@ -191,8 +189,8 @@ export default class KundenService extends AbstractKundenService {
         this._http.get(uri, options).subscribe(nextFn, errorFn);
     }
     /**
-     * Buecher suchen
-     * @param suchkriterien Die Suchkriterien
+     * Kunden suchen
+     * @param bestellungId Die BestellungId
      */
     @log
     findByBestellungId(bestellungId: string): void {
@@ -235,8 +233,8 @@ export default class KundenService extends AbstractKundenService {
         this._http.get(uri, options).subscribe(nextFn, errorFn);
     }
     /**
-     * Buecher suchen
-     * @param suchkriterien Die Suchkriterien
+     * Kunden suchen
+     * @param kundeId Die KundenId
      */
     @log
     findBestellungIdsBykundeId(kundeId: string): void {
@@ -283,8 +281,8 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein vorhandenes Buch aktualisieren
-     * @param buch Das JSON-Objekt mit den aktualisierten Buchdaten
+     * Ein vorhandenes Kunde aktualisieren
+     * @param kunde Das JSON-Objekt mit den aktualisierten Kundendaten
      * @param successFn Die Callback-Function fuer den Erfolgsfall
      * @param errorFn Die Callback-Function fuer den Fehlerfall
      */
@@ -316,8 +314,8 @@ export default class KundenService extends AbstractKundenService {
         this._http.put(uri, body, options).subscribe(nextFn, errorFnPut);
     }
     /**
-     * Ein vorhandenes Buch aktualisieren
-     * @param buch Das JSON-Objekt mit den aktualisierten Buchdaten
+     * Ein vorhandenes Kunde aktualisieren
+     * @param kunde Das JSON-Objekt mit den aktualisierten Kundendaten
      * @param successFn Die Callback-Function fuer den Erfolgsfall
      * @param errorFn Die Callback-Function fuer den Fehlerfall
      */
@@ -350,8 +348,8 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein Buch l&ouml;schen
-     * @param buch Das JSON-Objekt mit dem zu loeschenden Buch
+     * Ein Kunde l&ouml;schen
+     * @param kunde Das JSON-Objekt mit dem zu loeschenden Kunden
      * @param successFn Die Callback-Function fuer den Erfolgsfall
      * @param errorFn Die Callback-Function fuer den Fehlerfall
      */
@@ -502,7 +500,7 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein Response-Objekt in ein Array von Buch-Objekten konvertieren.
+     * Ein Response-Objekt in ein Array von Kunden-Objekten konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log
@@ -528,7 +526,7 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein Response-Objekt in ein Array von Buch-Objekten konvertieren.
+     * Ein Response-Objekt in ein Array von Kunde-Objekten konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log
@@ -541,7 +539,7 @@ export default class KundenService extends AbstractKundenService {
     }
 
     /**
-     * Ein Response-Objekt in ein Array von Buch-Objekten konvertieren.
+     * Ein Response-Objekt in ein Array von Kunde-Objekten konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log
@@ -560,7 +558,7 @@ export default class KundenService extends AbstractKundenService {
     }*/
 
     /**
-     * Ein Response-Objekt in ein Buch-Objekt konvertieren.
+     * Ein Response-Objekt in ein Kunde-Objekt konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log

@@ -76,7 +76,7 @@ import {isBlank, log} from '../../../shared/shared';
     `
 })
 export default class StammdatenPrivat implements OnInit {
-    // <stammdaten [buch]="...">
+    // <stammdaten [kunde]="...">
     @Input() kunde: Kunde;
 
     form: ControlGroup;
@@ -90,7 +90,7 @@ export default class StammdatenPrivat implements OnInit {
 
     /**
      * Das Formular als Gruppe von Controls initialisieren und mit den
-     * Stammdaten des zu &auml;ndernden Buchs vorbelegen.
+     * Stammdaten des zu &auml;ndernden Kunden vorbelegen.
      */
     ngOnInit(): void {
         console.log('StammdatenPrivat.ngOnInit(): kunde=', this.kunde);
@@ -105,7 +105,7 @@ export default class StammdatenPrivat implements OnInit {
     }
 
     /**
-     * Die aktuellen Stammdaten f&uuml;r das angezeigte Buch-Objekt
+     * Die aktuellen Stammdaten f&uuml;r das angezeigte Kunden-Objekt
      * zur&uuml;ckschreiben.
      * @return false, um das durch den Button-Klick ausgel&ouml;ste Ereignis
      *         zu konsumieren.

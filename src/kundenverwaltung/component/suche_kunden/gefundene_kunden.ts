@@ -27,7 +27,7 @@ import APP_ROUTES from '../../../app/routes';
 import {log} from '../../../shared/shared';
 
 /**
- * Komponente f&uuml;r das Tag <code>gefundene-bueche</code>
+ * Komponente f&uuml;r das Tag <code>gefundene-kunden</code>
  */
 @Component({
     selector: 'gefundene-kunden',
@@ -68,7 +68,7 @@ import {log} from '../../../shared/shared';
                             <td>{{k.identity.nachname}}</td>
                             <td>{{k.umsatz}}</td>
                             <td>
-                                <!-- Pfad /detailsBuch/:id, @RouteConfig in app.ts -->
+                                <!-- Pfad /detailsKunde/:id, @RouteConfig in app.ts -->
                                 <!-- modaler Dialog als Alternative: -->
                                 <!-- http://v4-alpha.getbootstrap.com/components/modal -->
                                 <a [routerLink]="['DetailsKunde', {'id': k.id}]"
@@ -106,8 +106,8 @@ export default class GefundeneKunden {
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Buch in der Detailsseite anzeigen.
-     * @param buch Das ausgew&auml;hlte Buch
+     * Das ausgew&auml;hlte bzw. angeklickte Kunde in der Detailsseite anzeigen.
+     * @param kunde Das ausgew&auml;hlte Kunde
      */
     @log
     details(kunde: Kunde): void {
@@ -118,8 +118,8 @@ export default class GefundeneKunden {
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Buch l&ouml;schen.
-     * @param buch Das ausgew&auml;hlte Buch
+     * Das ausgew&auml;hlte bzw. angeklickte Kunde l&ouml;schen.
+     * @param kunde Das ausgew&auml;hlte Kunde
      */
     @log
     remove(kunde: Kunde): void {

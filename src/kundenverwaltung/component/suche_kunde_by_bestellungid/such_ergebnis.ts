@@ -73,9 +73,9 @@ export default class SuchErgebnis implements OnInit {
     }
 
     /**
-     * Methode, um den injizierten <code>BuecherService</code> zu beobachten,
+     * Methode, um den injizierten <code>KundenService</code> zu beobachten,
      * ob es gefundene bzw. darzustellende B&uuml;cher gibt, die in der
-     * Kindkomponente f&uuml;r das Tag <code>gefundene-buecher</code>
+     * Kindkomponente f&uuml;r das Tag <code>gefundener-kunde</code>
      * dargestellt werden. Diese private Methode wird in der Methode
      * <code>ngOnInit</code> aufgerufen.
      */
@@ -93,7 +93,7 @@ export default class SuchErgebnis implements OnInit {
     }
 
     /**
-     * Methode, um den injizierten <code>BuecherService</code> zu beobachten,
+     * Methode, um den injizierten <code>KundenService</code> zu beobachten,
      * ob es bei der Suche Fehler gibt, die in der Kindkomponente f&uuml;r das
      * Tag <code>error-message</code> dargestellt werden. Diese private Methode
      * wird in der Methode <code>ngOnInit</code> aufgerufen.

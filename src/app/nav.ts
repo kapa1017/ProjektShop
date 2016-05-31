@@ -40,7 +40,7 @@ import {isAdmin} from '../iam/iam';
                                 <i class="fa fa-home"></i> &nbsp; Home
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" *ngIf="isAdmin()">
                             <div class="dropdown">
                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
                                     Kunde
@@ -74,20 +74,9 @@ import {isAdmin} from '../iam/iam';
                                     </li>
                                     <li *ngIf="isAdmin()">
                                         <a [routerLink]="['Tortendiagramm']">
-                                            <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm
+                                            <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm Bestellungen
                                         </a>
                                     </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Artikel
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
-                                    <li><a [routerLink]="['SucheArtikels']"> &nbsp; SucheArtikels</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -132,6 +121,17 @@ import {isAdmin} from '../iam/iam';
                     </a>
                 </li>
             </ul>
+            <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Artikel
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role = "menu" aria-labelledby="menu1">
+                                    <li><a [routerLink]="['SucheArtikels']"> &nbsp; SucheArtikels</a></li>
+                                </ul>
+                            </div>
+                        </li>
             -->
         </nav>
     `,
