@@ -14,15 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /* tslint:disable:max-line-length */
-import {Component, OnInit} from 'angular2/core';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, ControlGroup, Control} from 'angular2/common';
+import {Component, OnInit} from 'angular2/core';
 import {Router, CanActivate} from 'angular2/router';
-
 import KundeRegistrierungService from '../service/kundeRegistrierung_service';
 import Kunde from '../../kundenverwaltung/model/kunde';
-import KundeValidator from '../../kundenverwaltung/validator/buch_validator';
+import KundeValidator from '../../kundenverwaltung/component/validator/kunde_validator';
 import APP_ROUTES from '../../app/routes';
 import {isAdmin} from '../../iam/iam';
 import {isPresent, log} from '../../shared/shared';
@@ -80,7 +78,8 @@ export default class KundeRegistrierung implements OnInit {
 
     constructor(
         private _formBuilder: FormBuilder,
-        private _kundeRegistrierungService: KundeRegistrierungService, private _router: Router) {
+        private _kundeRegistrierungService: KundeRegistrierungService,
+        private _router: Router) {
         console.log('KundeRegistrierung.constructor()');
         if (!isPresent(_router)) {
             console.error('Injizierter Router:', _router);
@@ -147,9 +146,11 @@ export default class KundeRegistrierung implements OnInit {
         };
         const errorFn: (status: number, text: string) => void =
             (status: number, text: string = null): void => {
-                console.log(`KundeRegistrierung.save(): errorFn(): status: ${status}`);
+                console.log(
+                    `KundeRegistrierung.save(): errorFn(): status: ${status}`);
                 if (isPresent(text)) {
-                    console.log(`KundeRegistrierung.save(): errorFn(): text: ${text}`);
+                    console.log(
+                        `KundeRegistrierung.save(): errorFn(): text: ${text}`);
                 }
             };
         this._kundeRegistrierungService.save(neuerKunde, successFn, errorFn);
