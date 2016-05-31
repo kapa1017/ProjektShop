@@ -10,7 +10,8 @@
         "removeComments": false,
         "noImplicitAny": true,
         "listFiles": true,
-        "diagnostics": true
+        "diagnostics": true,
+        "compileOnSave": false
     },
     "exclude": [
         "node_modules",
