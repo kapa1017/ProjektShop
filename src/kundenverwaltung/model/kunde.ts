@@ -224,9 +224,7 @@ export default class Kunde {
             this.kategorie--;
         }
     }
-    isKunde_seit(seit: string): boolean {
-        return this.seit === moment(seit);
-    }
+    isKunde_seit(seit: string): boolean { return this.seit === moment(seit); }
     isPrivat(): boolean {
         if (this.typ === 'P') {
             return true;
