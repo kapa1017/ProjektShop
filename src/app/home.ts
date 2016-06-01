@@ -24,9 +24,8 @@ import {Component} from 'angular2/core';
     selector: 'home',
     template: `
         <div class="jumbotron">
-            <h1>Beispiel .....</h1>
-            <p> ... </p>
-            <h2>bsp...</h2>
+            <h1>Home</h1>
+            <h2>Die Heimat der SPA</h2>
         </div>
     `
 })
