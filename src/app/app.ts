@@ -130,6 +130,7 @@ import {APP_ROUTE_DEFINITIONS} from './routes';
             <!-- Eigene Komponente fuer die Kopfleiste -->
             <app-header></app-header>
         </div>
+        <!-- Eigene Komponente fuer die Navigationsleiste -->
         <div class="row">
             <app-nav></app-nav>
         </div>
