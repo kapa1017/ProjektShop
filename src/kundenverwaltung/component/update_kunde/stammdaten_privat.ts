@@ -48,7 +48,7 @@ import {isBlank, log} from '../../../shared/shared';
                 </label>
                 <div class="col-sm-10">
                     <input id="nachnameInput"
-                        placeholder="Kundenname"
+                        placeholder="Nachname"
                         class="form-control"
                         autofocus
                         type="search"
@@ -56,8 +56,60 @@ import {isBlank, log} from '../../../shared/shared';
                 </div>
                 <div class="col-sm-offset-2 col-sm-10"
                      *ngIf="!nachname.valid && nachname.touched">
-                    Ein Kundenname muss mit einem Buchstaben oder einer Ziffer
+                    Ein Nachname muss mit einem Buchstaben oder einer Ziffer
                     beginnen.
+                </div>
+            </div>
+            
+            <div class="form-group row"
+                 [class.text-danger]="!vorname.valid && vorname.touched">
+                <label class="col-sm-2 form-control-label">
+                Vorname *
+                </label>
+                <div class="col-sm-10">
+                    <input id="vornameInput"
+                        placeholder="Vorname"
+                        class="form-control"
+                        type="search"
+                        [ngFormControl]="vorname">
+                </div>
+                <div class="col-sm-offset-2 col-sm-10"
+                     *ngIf="!vorname.valid && vorname.touched">
+                    Ein Vorname muss mit einem Buchstaben oder einer Ziffer
+                    beginnen.
+                </div>
+            </div>
+             
+            <div class="form-group row"
+                [class.text-danger]="!rabatt.valid && rabatt.touched">
+                <label for="rabattInput" class="col-sm-2 form-control-label">
+                    Rabatt *
+                </label>
+                <div class="col-sm-10">
+                    <input id="rabattInput"
+                        placeholder="Rabatt in Prozent, z.B. 5.67"
+                        required
+                        class="form-control"
+                        type="search"
+                        [ngFormControl]="rabatt"/>
+                </div>
+                <div class="col-sm-offset-2 col-sm-10"
+                    *ngIf="!rabatt.valid && rabatt.touched">
+                    Ein Rabatt muss in Prozent eingegeben werden, z.B. 5.67
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-2 form-control-label">Familienstand</label>
+                <div class="col-sm-10">
+                    <select class="form-control"
+                    [ngFormControl]="familienstand">
+                        <option value=""></option>
+                        <option value="VERHEIRATET">verheiratet</option>
+                        <option value="LEDIG">ledig</option>
+                        <option value="GESCHIEDEN">geschieden</option>
+                        <option value="VERWITWET">verwitwet</option>                                
+                        </select>
                 </div>
             </div>
             
@@ -81,6 +133,9 @@ export default class StammdatenPrivat implements OnInit {
 
     form: ControlGroup;
     nachname: Control;
+    vorname: Control;
+    rabatt: Control;
+    familienstand: Control;
 
     constructor(
         private _formBuilder: FormBuilder,
@@ -98,9 +153,15 @@ export default class StammdatenPrivat implements OnInit {
         // Definition und Vorbelegung der Eingabedaten
         this.nachname =
             new Control(this.kunde.identity.nachname, KundeValidator.nachname);
+        this.vorname = new Control(this.kunde.identity.vorname);
+        this.rabatt = new Control(this.kunde.rabatt);
+        this.familienstand = new Control(this.kunde.familienstand);
         this.form = this._formBuilder.group({
             // siehe ngFormControl innerhalb von @Component({template: `...`})
-            'nachname': this.nachname
+            'nachname': this.nachname,
+            'vorname': this.vorname,
+            'rabatt': this.rabatt,
+            'familienstand': this.familienstand
         });
     }
 
@@ -126,9 +187,10 @@ export default class StammdatenPrivat implements OnInit {
 
         // rating, preis und rabatt koennen im Formular nicht geaendert werden
         this.kunde.updateStammdatenPrivat(
-            this.nachname.value, this.kunde.kategorie, this.kunde.newsletter,
-            this.kunde.rabatt, this.kunde.umsatz, this.kunde.agbAkzeptiert,
-            this.kunde.bemerkungen, this.kunde.geschlecht);
+            this.nachname.value, this.vorname.value, this.kunde.kategorie,
+            this.kunde.newsletter, parseFloat(this.rabatt.value),
+            this.kunde.umsatz, this.kunde.agbAkzeptiert, this.kunde.bemerkungen,
+            this.kunde.geschlecht, this.familienstand.value);
         console.log(
             'StammdatenPrivat.updatePrivateKunde(): kunde=', this.kunde);
 

@@ -70,7 +70,7 @@ import {isString, Waiting, ErrorMessage} from '../../../shared/shared';
                 </div>
             </div>
             
-            <div *ngIf="!kunde.isPrivat()">
+            <div *ngIf="kunde.isFirmenkunde()">
                 &nbsp;
                 <a [routerLink]="['UpdateKunde', {'id': kunde.id}]"
                    data-toggle="tooltip" title="Bearbeiten"

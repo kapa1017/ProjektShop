@@ -28,6 +28,8 @@ import {isPresent} from '../../shared/shared';
 import {Moment} from 'moment';
 import * as moment_ from 'moment';
 const moment: (date: string) => Moment = (<any>moment_)['default'];
+// import {IIdentityShared} from './identity';
+// import Identity from './identity';
 
 const MIN_KATEGORIE: number = 0;
 const MAX_KATEGORIE: number = 5;
@@ -93,6 +95,7 @@ export interface IKundeForm extends IKundeShared {
     p: RadioButtonState;
     f: RadioButtonState;
     nachname: string;
+    vorname: string;
     rabatt: string;
     umsatz: string;
     sport?: boolean;
@@ -105,6 +108,7 @@ export interface IKundeForm extends IKundeShared {
  * Functions fuer Abfragen und Aenderungen.
  */
 export default class Kunde {
+    // identity: Identity = new Identity(null, null,null, null, null, null);
     public kategorieArray: Array<boolean> = [];
     // wird i.a. nicht direkt aufgerufen, sondern Kunde.fromServer oder
     // Kunde.fromForm
@@ -126,7 +130,6 @@ export default class Kunde {
         this.newsletter = newsletter || null;
         this.bemerkungen = bemerkungen || null;
         this.bestellungenUri = bestellungenUri || null;
-        // this.familienstand = familienstand || null;
         this.geschlecht = geschlecht || null;
         this.familienstand = familienstand || null;
         this.hobbys = isPresent(hobbys) && hobbys.length !== 0 ? hobbys : [];
@@ -142,7 +145,7 @@ export default class Kunde {
      * Ein Kunde-Objekt mit JSON-Daten erzeugen, die von einem RESTful Web
      * Service kommen.
      * @param kunde JSON-Objekt mit Daten vom RESTful Web Server
-     * @return Das initialisierte Kunde-Objekt
+     * @return Das initialisierte unde-Objekt
      */
     static fromServer(kundeServer: IKundeServer): Kunde {
         const kunde: Kunde = new Kunde(
@@ -152,16 +155,19 @@ export default class Kunde {
             kundeServer.bemerkungen, kundeServer.bestellungenUri,
             kundeServer.geschlecht, kundeServer.typ, kundeServer.familienstand,
             kundeServer.hobbys);
+        // kundeServer.familienstand
         console.log('Kunde.fromServer(): kunde=', kunde);
         return kunde;
     }
     /**
-     * Ein Buch-Objekt mit JSON-Daten erzeugen, die von einem Formular kommen.
+     * Ein Kunde-Objekt mit JSON-Daten erzeugen, die von einem Formular kommen.
      * @param JSON-Objekt mit Daten vom Formular
-     * @return Das initialisierte Buch-Objekt
+     * @return Das initialisierte Kunde-Objekt
      */
     static fromForm(kundeForm: IKundeForm): Kunde {
         const typ: 'P'|'F' = kundeForm.p.checked ? 'P' : 'F';
+        /*const geschlecht: 'MAENNLICH'|'WEIBLICH' =
+            kundeForm.maennlich.checked ? 'MAENNLICH' : 'WEIBLICH';*/
         const hobbys: Array<string> = [];
         if (kundeForm.sport) {
             hobbys.push('SPORT');
@@ -179,13 +185,28 @@ export default class Kunde {
             null, kundeForm.newsletter, kundeForm.agbAkzeptiert,
             kundeForm.bemerkungen, kundeForm.bestellungenUri,
             kundeForm.geschlecht, typ, null, hobbys);
+        // familienstand
         console.log('Kunde.fromForm(): kunde=', kunde);
         return kunde;
+        // kundeForm.loginname, kundeForm.kategorie,kundeForm.newsletter,
+        // kundeForm.agbAkzeptiert
     }
     // http://momentjs.com
     get datumFormatted(): string { return this.seit.format('Do MMM YYYY'); }
 
     get datumFromNow(): string { return this.seit.fromNow(); }
+
+    /**
+     * Abfrage, ob im Kundenachname der angegebene Teilstring enthalten ist. Dabei
+     * wird nicht auf Gross-/Kleinschreibung geachtet.
+     * @param titel Zu &uuml;berpr&uuml;fender Teilstring
+     * @return true, falls der Teilstring im Kundennachname enthalten ist. Sonst
+     *         false.
+     */
+    containsLoginname(nachname: string): boolean {
+        return this.identity.nachname.toLowerCase().includes(
+            nachname.toLowerCase());
+    }
     /**
      * Die Bewertung ("kategorie") des Kunden um 1 erh&ouml;hen
      */
@@ -203,16 +224,28 @@ export default class Kunde {
             this.kategorie--;
         }
     }
+    isKunde_seit(seit: string): boolean {
+        return this.seit === moment(seit);
+    }
     isPrivat(): boolean {
         if (this.typ === 'P') {
             return true;
         }
     }
+    isFirmenkunde(): boolean {
+        if (this.typ === 'F') {
+            return true;
+        }
+    }
+    hasGeschlecht(geschlecht: string): boolean {
+        return this.geschlecht === geschlecht;
+    }
     updateStammdaten(
-        nachname: string, kategorie: number, newsletter: boolean,
-        rabatt: number, umsatz: number, agbAkzeptiert: boolean,
-        bemerkungen: string): void {
+        nachname: string, vorname: string, kategorie: number,
+        newsletter: boolean, rabatt: number, umsatz: number,
+        agbAkzeptiert: boolean, bemerkungen: string): void {
         this.identity.nachname = nachname;
+        this.identity.vorname = vorname;
         this.kategorie = kategorie;
         this.rabatt = rabatt;
         this.umsatz = umsatz;
@@ -221,10 +254,13 @@ export default class Kunde {
         this.bemerkungen = bemerkungen;
     }
     updateStammdatenPrivat(
-        nachname: string, kategorie: number, newsletter: boolean,
-        rabatt: number, umsatz: number, agbAkzeptiert: boolean,
-        bemerkungen: string, geschlecht: 'MAENNLICH'|'WEIBLICH'): void {
+        nachname: string, vorname: string, kategorie: number,
+        newsletter: boolean, rabatt: number, umsatz: number,
+        agbAkzeptiert: boolean, bemerkungen: string,
+        geschlecht: 'MAENNLICH'|'WEIBLICH',
+        familienstand: 'VERHEIRATET'|'LEDIG'|'GESCHIEDEN'|'VERWITWET'): void {
         this.identity.nachname = nachname;
+        this.identity.vorname = vorname;
         this.kategorie = kategorie;
         this.rabatt = rabatt;
         this.umsatz = umsatz;
@@ -232,6 +268,7 @@ export default class Kunde {
         this.agbAkzeptiert = agbAkzeptiert;
         this.bemerkungen = bemerkungen;
         this.geschlecht = geschlecht;
+        this.familienstand = familienstand;
     }
     // Überprüft ob Hobbys
     hasHobbys(): boolean { return this.hobbys.length !== 0; }

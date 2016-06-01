@@ -46,6 +46,8 @@ export default class KundenServiceMockServer extends AbstractKundenService {
     private _kundenEmitter: EventEmitter<Array<Kunde>> =
         new EventEmitter<Array<Kunde>>();
     private _kundeEmitter: EventEmitter<Kunde> = new EventEmitter<Kunde>();
+    private _bestellungenIdsEmitter: EventEmitter<Array<string>> =
+        new EventEmitter<Array<string>>();
     private _errorEmitter: EventEmitter<string|number> =
         new EventEmitter<string|number>();
     private _kunde: Kunde = null;
@@ -90,6 +92,11 @@ export default class KundenServiceMockServer extends AbstractKundenService {
     @log
     observeError(observerFn: (err: string|number) => void, thisArg: any): void {
         this._errorEmitter.forEach(observerFn, thisArg);
+    }
+    observeBestellungenIds(
+        observerFn: (bestellungenIds: Array<string>) => void,
+        thisArg: any): void {
+        this._bestellungenIdsEmitter.forEach(observerFn, thisArg);
     }
 
     /**
@@ -209,6 +216,45 @@ export default class KundenServiceMockServer extends AbstractKundenService {
             console.log(
                 `KundenServiceMockServer.findById(): errorFn(): ${status}`);
             this._errorEmitter.emit(status);
+        };
+
+        this._http.get(uri).subscribe(nextFn, errorFn);
+    }
+    /**
+     * Buecher suchen
+     * @param suchkriterien Die Suchkriterien
+     */
+    @log
+    findBestellungIdsBykundeId(kundeId: string): void {
+        if (isBlank(kundeId)) {
+            return;
+        }
+        const uri: string = `${this._baseUriKunden}/${kundeId}/bestellungenIds`;
+        console.log(`KundenService.find(): uri=${uri}`);
+        const nextFn: ((response: Response) => void) = (response: Response) => {
+            console.log('KundenService.findBestellungIdsBykundeId(): nextFn()');
+            let bestellungenIds: Array<string> = <Array<string>>response.json();
+            // let bestellungenIds: Array<string> =
+            // this._responseToArraystring(response);
+            this._bestellungenIdsEmitter.emit(bestellungenIds);
+        };
+        const errorFn: (err: Response) => void = (err: Response) => {
+            const status: number = err.status;
+            console.log(
+                `KundenService.findBestellungIdsBykundeId(): errorFn(): ${status}`);
+            if (status === 400) {
+                const body: string = err.text();
+                if (isBlank(body)) {
+                    this._errorEmitter.emit(status);
+                } else {
+                    // z.B. [PARAMETER][findByTitel.titel][Bei einem ...][x]
+                    let errorMsg: string = body.split('[')[3];
+                    errorMsg = errorMsg.substr(0, errorMsg.length - 2);
+                    this._errorEmitter.emit(errorMsg);
+                }
+            } else {
+                this._errorEmitter.emit(status);
+            }
         };
 
         this._http.get(uri).subscribe(nextFn, errorFn);

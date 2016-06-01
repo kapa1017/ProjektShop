@@ -48,7 +48,7 @@ import {isBlank, log} from '../../../shared/shared';
                 </label>
                 <div class="col-sm-10">
                     <input id="nachnameInput"
-                        placeholder="Kundenname"
+                        placeholder="Nachname"
                         class="form-control"
                         autofocus
                         type="search"
@@ -56,11 +56,49 @@ import {isBlank, log} from '../../../shared/shared';
                 </div>
                 <div class="col-sm-offset-2 col-sm-10"
                      *ngIf="!nachname.valid && nachname.touched">
-                    Ein Kundenname muss mit einem Buchstaben oder einer Ziffer
+                    Ein Nachname muss mit einem Buchstaben oder einer Ziffer
+                    beginnen.
+                </div>
+            </div>
+            
+            <div class="form-group row"
+                 [class.text-danger]="!vorname.valid && vorname.touched">
+                <label class="col-sm-2 form-control-label">
+                Vorname *
+                </label>
+                <div class="col-sm-10">
+                    <input id="vornameInput"
+                        placeholder="Vorname"
+                        class="form-control"
+                        type="search"
+                        [ngFormControl]="vorname">
+                </div>
+                <div class="col-sm-offset-2 col-sm-10"
+                     *ngIf="!vorname.valid && vorname.touched">
+                    Ein Vorname muss mit einem Buchstaben oder einer Ziffer
                     beginnen.
                 </div>
             </div>
                     
+            <div class="form-group row"
+                [class.text-danger]="!rabatt.valid && rabatt.touched">
+                <label for="rabattInput" class="col-sm-2 form-control-label">
+                    Rabatt *
+                </label>
+                <div class="col-sm-10">
+                    <input id="rabattInput"
+                        placeholder="Rabatt in Prozent, z.B. 5.67"
+                        required
+                        class="form-control"
+                        type="search"
+                        [ngFormControl]="rabatt"/>
+                </div>
+                <div class="col-sm-offset-2 col-sm-10"
+                    *ngIf="!rabatt.valid && rabatt.touched">
+                    Ein Rabatt muss in Prozent eingegeben werden, z.B. 5.67
+                </div>
+            </div>
+                      
             <!-- Fuer DatePicker, Rating usw. gibt es noch keine brauchbaren
                  AngularJS-Direktiven auf Basis von Bootstrap -->
             
@@ -76,11 +114,13 @@ import {isBlank, log} from '../../../shared/shared';
     `
 })
 export default class Stammdaten implements OnInit {
-    // <stammdaten [Kunde]="...">
+    // <stammdaten [kunde]="...">
     @Input() kunde: Kunde;
 
     form: ControlGroup;
     nachname: Control;
+    vorname: Control;
+    rabatt: Control;
     constructor(
         private _formBuilder: FormBuilder,
         private _kundenService: KundenService, private _router: Router) {
@@ -97,9 +137,13 @@ export default class Stammdaten implements OnInit {
         // Definition und Vorbelegung der Eingabedaten
         this.nachname =
             new Control(this.kunde.identity.nachname, KundeValidator.nachname);
+        this.vorname = new Control(this.kunde.identity.vorname);
+        this.rabatt = new Control(this.kunde.rabatt);
         this.form = this._formBuilder.group({
             // siehe ngFormControl innerhalb von @Component({template: `...`})
             'nachname': this.nachname,
+            'vorname': this.vorname,
+            'rabatt': this.rabatt
         });
     }
 
@@ -123,8 +167,9 @@ export default class Stammdaten implements OnInit {
 
         // rating, preis und rabatt koennen im Formular nicht geaendert werden
         this.kunde.updateStammdaten(
-            this.nachname.value, this.kunde.kategorie, this.kunde.newsletter,
-            this.kunde.rabatt, this.kunde.umsatz, this.kunde.agbAkzeptiert,
+            this.nachname.value, this.vorname.value, this.kunde.kategorie,
+            this.kunde.newsletter, parseFloat(this.rabatt.value),
+            this.kunde.umsatz, this.kunde.agbAkzeptiert,
             this.kunde.bemerkungen);
         console.log('Stammdaten.update(): kunde=', this.kunde);
 
