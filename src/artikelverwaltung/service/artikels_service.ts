@@ -18,21 +18,11 @@
 /* tslint:disable:max-line-length */
 import {Inject, EventEmitter, provide, Provider} from 'angular2/core';
 import {Http, Response, Headers, RequestOptionsArgs, URLSearchParams} from 'angular2/http';
-
-// Moment exportiert den Namespace moment und die gleichnamige Function:
-// http://stackoverflow.com/questions/35254524/using-moment-js-in-angular-2-typescript-application#answer-35255412
-import {Moment} from 'moment';
-import * as moment_ from 'moment';
-const moment: (date: Date) => Moment = (<any>moment_)['default'];
-
-import {IChart, ChartDataSet, LinearChartData, CircularChartData} from 'chart.js/Chart';
-
 import Artikel from '../model/artikel';
 import {IArtikelServer, IArtikelForm} from '../model/artikel';
 import AbstractArtikelsService from './abstract_artikels_service';
 import {ChartService, BASE_URI, PATH_ARTIKELS, isBlank, isPresent, isEmpty, log} from '../../shared/shared';
 import {getAuthorization} from '../../iam/iam';
-/* tslint:enable:max-line-length */
 
 // Methoden der Klasse Http
 //  * get(url, options) – HTTP GET request
@@ -56,6 +46,7 @@ export default class ArtikelsService extends AbstractArtikelsService {
         new EventEmitter<Array<Artikel>>();
     private _artikelEmitter: EventEmitter<Artikel> =
         new EventEmitter<Artikel>();
+    // private _fileEmitter: EventEmitter<File> = new EventEmitter<File>();
     private _errorEmitter: EventEmitter<string|number> =
         new EventEmitter<string|number>();
     private _artikel: Artikel = null;
@@ -75,41 +66,46 @@ export default class ArtikelsService extends AbstractArtikelsService {
     }
 
     /**
-     * Ein Artikel-Objekt puffern.
-     * @param artikel Das Artikel-Objekt, das gepuffert wird.
+     * Ein Buch-Objekt puffern.
+     * @param buch Das Buch-Objekt, das gepuffert wird.
      * @return void
      */
     set artikel(artikel: Artikel) {
         console.log('ArtikelsService.set artikel()', artikel);
         this._artikel = artikel;
     }
-
     @log
     observeArtikels(
         observerFn: (artikels: Array<Artikel>) => void, thisArg: any): void {
         this._artikelsEmitter.forEach(observerFn, thisArg);
     }
-
     @log
     observeArtikel(observerFn: (artikel: Artikel) => void, thisArg: any): void {
         this._artikelEmitter.forEach(observerFn, thisArg);
     }
-
     @log
     observeError(observerFn: (err: string|number) => void, thisArg: any): void {
         this._errorEmitter.forEach(observerFn, thisArg);
     }
-
     /**
-     * Artikels suchen
+     * Buecher suchen
      * @param suchkriterien Die Suchkriterien
      */
     @log
     find(suchkriterien: IArtikelForm): void {
         const searchParams: URLSearchParams =
             this._suchkriterienToSearchParams(suchkriterien);
+        console.log(`ArtikelsService.find(): searchParams=${searchParams}`);
         const uri: string = this._baseUriArtikels;
         console.log(`ArtikelsService.find(): uri=${uri}`);
+        const headers: Headers =
+            new Headers({'Content-Type': 'application/json'});
+        headers.append('Authorization', getAuthorization());
+        // RequestOptionsArgs in
+        // node_modules\angular2\ts\src\http\interfaces.ts
+        const options:
+            RequestOptionsArgs = {search: searchParams, headers: headers};
+        console.log('options=', options);
 
         const nextFn: ((response: Response) => void) = (response: Response) => {
             console.log('ArtikelsService.find(): nextFn()');
@@ -135,25 +131,31 @@ export default class ArtikelsService extends AbstractArtikelsService {
             }
         };
 
-        this._http.get(uri, {search: searchParams}).subscribe(nextFn, errorFn);
+        this._http.get(uri, options).subscribe(nextFn, errorFn);
     }
-
     /**
-     * Ein Artikel anhand der ID suchen
-     * @param id Die ID des gesuchten Artikels
+     * Ein Buch anhand der ID suchen
+     * @param id Die ID des gesuchten Buchs
      */
     @log
-    findById(id: string): void {
-        // Gibt es ein gepuffertes Artikel mit der gesuchten ID?
-        if (isPresent(this._artikel) && this._artikel._id === id) {
+    findById(artikelId: string): void {
+        // Gibt es ein gepuffertes Buch mit der gesuchten ID?
+        if (isPresent(this._artikel) && this._artikel.id === artikelId) {
             this._artikelEmitter.emit(this._artikel);
             return;
         }
-        if (isBlank(id)) {
+        if (isBlank(artikelId)) {
             return;
         }
 
-        const uri: string = `${this._baseUriArtikels}/${id}`;
+        const uri: string = `${this._baseUriArtikels}/${artikelId}`;
+        const headers: Headers =
+            new Headers({'Content-Type': 'application/json'});
+        headers.append('Authorization', getAuthorization());
+        // RequestOptionsArgs in
+        // node_modules\angular2\ts\src\http\interfaces.ts
+        const options: RequestOptionsArgs = {headers: headers};
+        console.log('options=', options);
         const nextFn: ((response: Response) => void) = (response: Response) => {
             this._artikel = this._responseToArtikel(response);
             this._artikelEmitter.emit(this._artikel);
@@ -164,56 +166,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
             this._errorEmitter.emit(status);
         };
 
-        this._http.get(uri).subscribe(nextFn, errorFn);
+        this._http.get(uri, options).subscribe(nextFn, errorFn);
     }
-
-    /**
-     * Ein neues Artikel anlegen
-     * @param neuesArtikel Das JSON-Objekt mit dem neuen Artikel
-     * @param successFn Die Callback-Function fuer den Erfolgsfall
-     * @param errorFn Die Callback-Function fuer den Fehlerfall
-     */
-    @log
-    save(
-        neuesArtikel: Artikel, successFn: (location: string) => void,
-        errorFn: (status: number, text: string) => void): void {
-        neuesArtikel.datum = moment(new Date());
-
-        const uri: string = this._baseUriArtikels;
-        const body: string = JSON.stringify(neuesArtikel.toJSON());
-        console.log('body=', body);
-
-        const headers: Headers =
-            new Headers({'Content-Type': 'application/json'});
-        headers.append('Authorization', getAuthorization());
-        // RequestOptionsArgs in
-        // node_modules\angular2\ts\src\http\interfaces.ts
-        const options: RequestOptionsArgs = {headers: headers};
-        console.log('options=', options);
-
-        const nextFn: ((response: Response) => void) = (response: Response) => {
-            if (response.status === 201) {
-                // TODO Das Response-Objekt enthaelt im Header NICHT "Location"
-                successFn(null);
-                return;
-            }
-        };
-        // async. Error-Callback statt sync. try/catch
-        const errorFnPost: ((errResponse: Response) => void) =
-            (errResponse: Response) => {
-                if (isPresent(errorFn)) {
-                    errorFn(errResponse.status, errResponse.text());
-                }
-            };
-        this._http.post(uri, body, options).subscribe(nextFn, errorFnPost);
-    }
-
-    /**
-     * Ein vorhandenes Artikel aktualisieren
-     * @param artikel Das JSON-Objekt mit den aktualisierten Artikeldaten
-     * @param successFn Die Callback-Function fuer den Erfolgsfall
-     * @param errorFn Die Callback-Function fuer den Fehlerfall
-     */
     @log
     update(
         artikel: Artikel, successFn: () => void,
@@ -238,13 +192,11 @@ export default class ArtikelsService extends AbstractArtikelsService {
                     errorFn(errResponse.status, errResponse.text());
                 }
             };
-
         this._http.put(uri, body, options).subscribe(nextFn, errorFnPut);
     }
-
     /**
-     * Ein Artikel l&ouml;schen
-     * @param artikel Das JSON-Objekt mit dem zu loeschenden Artikel
+     * Ein Buch l&ouml;schen
+     * @param buch Das JSON-Objekt mit dem zu loeschenden Buch
      * @param successFn Die Callback-Function fuer den Erfolgsfall
      * @param errorFn Die Callback-Function fuer den Fehlerfall
      */
@@ -252,7 +204,7 @@ export default class ArtikelsService extends AbstractArtikelsService {
     remove(
         artikel: Artikel, successFn: () => void,
         errorFn: (status: number) => void): void {
-        const uri: string = `${this._baseUriArtikels}/${artikel._id}`;
+        const uri: string = `${this._baseUriArtikels}/${artikel.id}`;
         const headers: Headers =
             new Headers({'Authorization': getAuthorization()});
         // RequestOptionsArgs in
@@ -272,108 +224,13 @@ export default class ArtikelsService extends AbstractArtikelsService {
                 }
             };
 
-
         this._http.delete(uri, options).subscribe(nextFn, errorFnDelete);
     }
-
-    // http://www.sitepoint.com/15-best-javascript-charting-libraries
-    // http://thenextweb.com/dd/2015/06/12/20-best-javascript-chart-libraries
-    // http://mikemcdearmon.com/portfolio/techposts/charting-libraries-using-d3
-
-    // D3 (= Data Driven Documents) ist das fuehrende Produkt fuer
-    // Datenvisualisierung:
-    //  initiale Version durch die Dissertation von Mike Bostock
-    //  gesponsort von der New York Times, seinem heutigen Arbeitgeber
-    //  basiert auf SVG = scalable vector graphics: Punkte, Linien, Kurven, ...
-    //  ca 250.000 Downloads/Monat bei https://www.npmjs.com
-    //  https://github.com/mbostock/d3 mit ueber 100 Contributors
-
-    // Chart.js ist deutlich einfacher zu benutzen als D3
-    //  basiert auf <canvas>
-    //  ca 25.000 Downloads/Monat bei https://www.npmjs.com
-    //  https://github.com/nnnick/Chart.js mit ueber 60 Contributors
-
-    /**
-     * Ein Balkendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     */
-    @log
-    setBarChart(chartElement: HTMLCanvasElement): void {
-        const uri: string = this._baseUriArtikels;
-        const successFn: Function = (response: Response) => {
-            this._createBarChart(
-                chartElement, this._responseToArrayArtikel(response));
-        };
-        const errorFn: Function =
-            (response: Response) => { console.error('response=', response); };
-        const nextFn: ((response: Response) => void) = (response: Response) => {
-            if (response.status === 200) {
-                successFn(response);
-                return;
-            }
-            errorFn(response);
-        };
-
-        this._http.get(uri).subscribe(nextFn);
-    }
-
-    /**
-     * Ein Liniendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     */
-    @log
-    setLinearChart(chartElement: HTMLCanvasElement): void {
-        const uri: string = this._baseUriArtikels;
-        const successFn: Function = (response: Response) => {
-            this._createLineChart(
-                chartElement, this._responseToArrayArtikel(response));
-        };
-        const errorFn: Function =
-            (response: Response) => { console.error('response=', response); };
-        const nextFn: ((response: Response) => void) = (response: Response) => {
-            if (response.status === 200) {
-                successFn(response);
-                return;
-            }
-            errorFn(response);
-        };
-
-        this._http.get(uri).subscribe(nextFn);
-    }
-
-    /**
-     * Ein Tortendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     */
-    @log
-    setPieChart(chartElement: HTMLCanvasElement): void {
-        const uri: string = this._baseUriArtikels;
-        const successFn: Function = (response: Response) => {
-            this._createPieChart(
-                chartElement, this._responseToArrayArtikel(response));
-        };
-        const errorFn: Function =
-            (response: Response) => { console.error('response=', response); };
-        const nextFn: ((response: Response) => void) = (response: Response) => {
-            if (response.status === 200) {
-                successFn(response);
-                return;
-            }
-            errorFn(response);
-        };
-
-        this._http.get(uri).subscribe(nextFn);
-    }
-
     toString(): String {
         return `ArtikelsService: {artikel: ${JSON.stringify(this._artikel, null, 2)}}`;
     }
-
     /**
-     * Ein Response-Objekt in ein Array von Artikel-Objekten konvertieren.
+     * Ein Response-Objekt in ein Array von Buch-Objekten konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log
@@ -382,31 +239,21 @@ export default class ArtikelsService extends AbstractArtikelsService {
         const searchParams: URLSearchParams = new URLSearchParams();
 
         if (!isEmpty(suchkriterien.bezeichnung)) {
-            searchParams.set('titel', suchkriterien.bezeichnung);
+            searchParams.set('bezeichnung', suchkriterien.bezeichnung);
         }
-        if (suchkriterien.druckausgabe) {
-            searchParams.set('art', 'DRUCKAUSGABE');
-        } else if (suchkriterien.kindle) {
-            searchParams.set('art', 'KINDLE');
+        if (!isEmpty(suchkriterien.kategorie)) {
+            searchParams.set('kategorie', suchkriterien.kategorie);
         }
-        if (isPresent(suchkriterien.rating)) {
-            searchParams.set('rating', suchkriterien.rating.toString());
-        }
-        if (!isEmpty(suchkriterien.lieferant)) {
-            searchParams.set('lieferant', suchkriterien.lieferant);
-        }
-        if (isPresent(suchkriterien.schnulze) && suchkriterien.schnulze) {
-            searchParams.set('schnulze', 'true');
-        }
-        if (isPresent(suchkriterien.scienceFiction)
-            && suchkriterien.scienceFiction) {
-            searchParams.set('scienceFiction', 'true');
-        }
+        /* if (suchkriterien.maennlich) {
+            searchParams.set('geschlecht', 'MAENNLICH');
+        } else if (suchkriterien.weiblich) {
+            searchParams.set('geschlecht', 'WEIBLICH');
+        }*/
         return searchParams;
     }
 
     /**
-     * Ein Response-Objekt in ein Array von Artikel-Objekten konvertieren.
+     * Ein Response-Objekt in ein Array von Buch-Objekten konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log
@@ -417,9 +264,8 @@ export default class ArtikelsService extends AbstractArtikelsService {
             return Artikel.fromServer(jsonObjekt);
         });
     }
-
     /**
-     * Ein Response-Objekt in ein Artikel-Objekt konvertieren.
+     * Ein Response-Objekt in ein Buch-Objekt konvertieren.
      * @param response Response-Objekt eines GET-Requests.
      */
     @log
@@ -427,92 +273,6 @@ export default class ArtikelsService extends AbstractArtikelsService {
         const jsonObjekt: IArtikelServer = <IArtikelServer>(response.json());
         return Artikel.fromServer(jsonObjekt);
     }
-
-    /**
-     * Ein Balkendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     * @param artikels Die zu ber&uecksichtigenden B&uuml;cher
-     */
-    @log
-    private _createBarChart(
-        chartElement: HTMLCanvasElement, artikels: Array<Artikel>): void {
-        const labels: Array<string> =
-            artikels.map((artikel: Artikel) => artikel._id);
-        const datasets: Array<ChartDataSet> = [{
-            label: 'Bewertungen',
-            fillColor: 'rgba(220,220,220,0.2)',
-            strokeColor: 'rgba(220,220,220,1)',
-            data: artikels.map((artikel: Artikel) => artikel.rating)
-        }];
-        const data: LinearChartData = {labels: labels, datasets: datasets};
-        console.log('ArtikelsService._createBarChart(): labels: ', labels);
-
-        const chart: IChart = this._chartService.getChart(chartElement);
-        if (isPresent(chart) && isPresent(datasets[0].data)
-            && datasets[0].data.length !== 0) {
-            chart.Bar(data);
-        }
-    }
-
-    /**
-     * Ein Liniendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     * @param artikels Die zu ber&uecksichtigenden B&uuml;cher
-     */
-    @log
-    private _createLineChart(
-        chartElement: HTMLCanvasElement, artikels: Array<Artikel>): void {
-        const labels: Array<string> =
-            artikels.map((artikel: Artikel) => artikel._id);
-        const datasets: Array<ChartDataSet> = [{
-            label: 'Bewertungen',
-            fillColor: 'rgba(220,220,220,0.2)',
-            strokeColor: 'rgba(220,220,220,1)',
-            data: artikels.map((artikel: Artikel) => artikel.rating)
-        }];
-        const data: LinearChartData = {labels: labels, datasets: datasets};
-
-        // TODO Chart.js 2.0: Das Datenmodell aendert sich
-        //      http://nnnick.github.io/Chart.js/docs-v2
-        //      https://github.com/nnnick/Chart.js/blob/v2.0-alpha/README.md
-        //      chart.d.ts gibt es noch nicht fuer 2.0:
-        //      https://github.com/nnnick/Chart.js/issues/1572
-        const chart: IChart = this._chartService.getChart(chartElement);
-        if (isPresent(chart) && isPresent(datasets[0].data)
-            && datasets[0].data.length !== 0) {
-            chart.Line(data);
-        }
-    }
-
-    /**
-     * Ein Tortendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     * @param artikels Die zu ber&uecksichtigenden B&uuml;cher
-     */
-    @log
-    private _createPieChart(
-        chartElement: HTMLCanvasElement, artikels: Array<Artikel>): void {
-        const pieData: Array<CircularChartData> =
-            new Array<CircularChartData>(artikels.length);
-        artikels.forEach((artikel: Artikel, i: number) => {
-            const data: CircularChartData = {
-                value: artikel.rating,
-                color: this._chartService.getColorPie(i),
-                highlight: this._chartService.getHighlightPie(i),
-                label: `${artikel._id}`
-            };
-            pieData[i] = data;
-        });
-
-        const chart: IChart = this._chartService.getChart(chartElement);
-        if (isPresent(chart) && pieData.length !== 0) {
-            chart.Pie(pieData);
-        }
-    }
 }
-
 export const ARTIKELS_SERVICE_PROVIDER: Provider =
     provide(ArtikelsService, {useClass: ArtikelsService});
