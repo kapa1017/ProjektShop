@@ -37,16 +37,16 @@ import {log} from '../../../shared/shared';
         <!-- Eine Direktive ist eine Komponente ohne View -->
         <div class="card" *ngIf="artikels != null">
             <div class="card-header">
-                <h4><i class="fa fa-folder-open-o"></i> Gefundene B&uuml;cher</h4>
+                <h4><i class="fa fa-folder-open-o"></i> Gefundene Artikel</h4>
             </div>
             <div class="card-block">
                 <table class="table table-striped table-hover table-responsive">
                     <thead>
                         <th>Nr.</th>
-                        <th>ID</th>
+                        <th>ArtikelsId</th>
                         <th>Bezeichnung</th>
-                        <th>Lieferant</th>
-                        <th>Schlagw&ouml;rter</th>
+                        <th>Rating</th>
+                        <th>Preis</th>
                         <th>
                             <span class="sr-only">
                                 Spalte f&uuml;r Details
@@ -61,40 +61,23 @@ import {log} from '../../../shared/shared';
                     <tbody>
                         <!-- Template Binding: ngFor -->
                         <!-- Event-Binding: statt (click) auch on-click -->
-                        <tr *ngFor="#b of artikels; #i = index" (click)="details(b)">
+                        <tr *ngFor="#k of artikels; #i = index" (click)="details(k)">
                             <td>{{i + 1}}</td>
-                            <td>{{b._id}}</td>
-                            <td>{{b.bezeichnung}}</td>
-                            <td>
-                                <span [ngSwitch]="b.lieferant">
-                                    <span *ngSwitchWhen="'EBAY'">O'Reilly</span>
-                                    <span *ngSwitchWhen="'AMAZON'">Packt</span>
-                                    <span *ngSwitchDefault>unbekannt</span>
-                                </span>
-                            </td>
-                            <td>
-                                <span *ngFor="#sw of b.schlagwoerter">
-                                    <span [ngSwitch]="sw">
-                                        <span *ngSwitchWhen="'SCHNULZE'">
-                                            Schnulze<br>
-                                        </span>
-                                        <span *ngSwitchWhen="'SCIENCE_FICTION'">
-                                            Sc. Fiction
-                                        </span>
-                                    </span>
-                                </span>
-                            </td>
+                            <td>{{k.id}}</td>
+                            <td>{{k.bezeichnung}}</td>
+                            <td>{{k.rating}}</td>
+                            <td>{{k.preis}}</td>
                             <td>
                                 <!-- Pfad /detailsArtikel/:id, @RouteConfig in app.ts -->
                                 <!-- modaler Dialog als Alternative: -->
                                 <!-- http://v4-alpha.getbootstrap.com/components/modal -->
-                                <a [routerLink]="['DetailsArtikel', {'id': b._id}]"
+                                <a [routerLink]="['DetailsArtikel', {'id': k.id}]"
                                    data-toggle="tooltip" title="Details anzeigen">
                                     <i class="fa fa-search-plus"></i>
                                 </a>
                             </td>
                             <td>
-                                <a (click)="remove(b)" data-toggle="tooltip"
+                                <a (click)="remove(k)" data-toggle="tooltip"
                                    title="Entfernen">
                                     <i class="fa fa-remove"></i>
                                 </a>
@@ -117,7 +100,7 @@ import {log} from '../../../shared/shared';
     `
 })
 export default class GefundeneArtikels {
-    // Property Binding: <gefundene-artikels [artikels]="...">
+    // Property Binding: <gefundene-buecher [buecher]="...">
     // Decorator fuer ein Attribut. Hier: siehe InputMetadata in
     // node_modules\angular2\ts\src\core\metadata\directives.ts
     @Input() artikels: Array<Artikel>;
@@ -128,22 +111,21 @@ export default class GefundeneArtikels {
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Artikel in der Detailsseite
-     * anzeigen.
-     * @param artikel Das ausgew&auml;hlte Artikel
+     * Das ausgew&auml;hlte bzw. angeklickte Buch in der Detailsseite anzeigen.
+     * @param buch Das ausgew&auml;hlte Buch
      */
     @log
     details(artikel: Artikel): void {
         console.log(
             `detailsArtikelDef.name=${APP_ROUTES.detailsArtikelDef.name}`);
-        console.log(`id=${artikel._id}`);
+        console.log(`id=${artikel.id}`);
         this._router.navigate(
-            [APP_ROUTES.detailsArtikelDef.name, {id: artikel._id}]);
+            [APP_ROUTES.detailsArtikelDef.name, {id: artikel.id}]);
     }
 
     /**
-     * Das ausgew&auml;hlte bzw. angeklickte Artikel l&ouml;schen.
-     * @param artikel Das ausgew&auml;hlte Artikel
+     * Das ausgew&auml;hlte bzw. angeklickte Buch l&ouml;schen.
+     * @param buch Das ausgew&auml;hlte Buch
      */
     @log
     remove(artikel: Artikel): void {
@@ -152,7 +134,7 @@ export default class GefundeneArtikels {
         };
         this._artikelsService.remove(artikel, null, errorFn);
         this.artikels =
-            this.artikels.filter((b: Artikel) => b._id !== artikel._id);
+            this.artikels.filter((k: Artikel) => k.id !== artikel.id);
     }
 
     toString(): String { return 'GefundeneArtikels'; }

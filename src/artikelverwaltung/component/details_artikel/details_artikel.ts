@@ -22,35 +22,29 @@ import {RouteParams} from 'angular2/router';
 import ArtikelsService from '../../service/artikels_service';
 import Artikel from '../../model/artikel';
 import Stammdaten from './stammdaten';
-import Schlagwoerter from './schlagwoerter';
+// import Hobbys from './hobbys';
+// import BestellungenIds from './bestellungenIds';
 import {isAdmin} from '../../../iam/iam';
 import {isString, Waiting, ErrorMessage} from '../../../shared/shared';
 
 /**
- * Komponente f&uuml;r das Tag <code>details-artikel</code>
+ * Komponente f&uuml;r das Tag <code>details-buch</code>
  */
 @Component({
     selector: 'details-artikel',
-    directives:
-        [CORE_DIRECTIVES, Stammdaten, Schlagwoerter, Waiting, ErrorMessage],
+    directives: [CORE_DIRECTIVES, Stammdaten, Waiting, ErrorMessage],
     template: `
         <waiting [activated]="waiting"></waiting>
 
         <section *ngIf="artikel !== null">
             <h4>Artikel {{artikel._id}}:</h4>
 
-            <!-- http://v4-alpha.getbootstrap.com/components/navs/#tabs -->
+        <!-- http://v4-alpha.getbootstrap.com/components/navs/#tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a class="nav-link active" href="#stammdaten"
                        data-toggle="tab">
                         Stammdaten
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="artikel.hasSchlagwoerter()">
-                    <a class="nav-link" href="#schlagwoerter"
-                       data-toggle="tab">
-                        Schlagw&ouml;rter
                     </a>
                 </li>
             </ul>
@@ -61,22 +55,6 @@ import {isString, Waiting, ErrorMessage} from '../../../shared/shared';
                         <stammdaten [artikel]="artikel"></stammdaten>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="schlagwoerter"
-                    *ngIf="artikel.hasSchlagwoerter()">
-                    <div class="m-t-1">
-                        <schlagwoerter [values]="artikel.schlagwoerter">
-                        </schlagwoerter>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                &nbsp;
-                <a [routerLink]="['UpdateArtikel', {'id': artikel._id}]"
-                   data-toggle="tooltip" title="Bearbeiten"
-                   *ngIf="isAdmin()">
-                   <i class="fa fa-2x fa-edit"></i>
-                </a>
             </div>
         </section>
 
@@ -100,7 +78,7 @@ export default class DetailsArtikel implements OnInit {
         this._observeArtikel();
         this._observeError();
 
-        // Pfad-Parameter aus /detailsArtikel/:_id
+        // Pfad-Parameter aus /detailsBuch/:_id
         const id: string = this._routeParams.params['id'];
         console.log(`DetailsArtikel.ngOnInit(): id= ${id}`);
         this._artikelsService.findById(id);
@@ -132,10 +110,10 @@ export default class DetailsArtikel implements OnInit {
 
             switch (err) {
                 case 404:
-                    this.errorMsg = 'Kein Artikel gefunden.';
+                    this.errorMsg = 'Kein Artikel gefunden :(.';
                     break;
                 default:
-                    this.errorMsg = 'Ein Fehler ist aufgetreten.';
+                    this.errorMsg = 'Ein Fehler ist aufgetreten. :D';
                     break;
             }
             console.log(`DetailsArtikel.errorMsg: ${this.errorMsg}`);

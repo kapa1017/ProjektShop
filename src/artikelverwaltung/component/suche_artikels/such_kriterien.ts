@@ -19,7 +19,6 @@
 import {Component, Output, EventEmitter} from 'angular2/core';
 // "common" enthaelt Direktiven (z.B. ngFor, ngIf), Form Controls und Pipes
 import {CORE_DIRECTIVES} from 'angular2/common';
-
 import ArtikelsService from '../../service/artikels_service';
 import {log} from '../../../shared/shared';
 
@@ -59,58 +58,23 @@ import {log} from '../../../shared/shared';
                 <form (submit)="find()" role="form">
                     <div class="form-group row">
                         <label for="bezeichnungInput"
-                               class="col-sm-2 form-control-label">Titel</label>
+                               class="col-sm-2 form-control-label">Bezeichnung</label>
                         <div class="col-sm-10">
                             <input id="bezeichnungInput"
                                 type="search"
-                                placeholder="Den Titel oder einen Teil davon eingeben"
+                                placeholder="Den Artikelnamen oder einen Teil davon eingeben"
                                 class="form-control"
                                 [(ngModel)]="bezeichnung">
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 form-control-label">Verlag</label>
-                        <div class="col-sm-10">
-                            <select class="form-control"
-                                    [(ngModel)]="lieferant">
-                                <option value=""></option>
-                                <option value="OREILLY">O'Reilly</option>
-                                <option value="PACKT">Packt</option>
-                        </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="schlagwoerterInput"
-                               class="col-sm-2 form-control-label">
-                            Schlagw&ouml;rter
-                        </label>
-                        <div class="col-sm-10">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"
-                                           [(ngModel)]="schnulze"/>
-                                    Schnulze
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"
-                                           [(ngModel)]="scienceFiction"/>
-                                    Science Fiction
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                     <div class="form-group row">
                         <div class="col-sm-offset-2 col-sm-10">
                             <i class="fa fa-info-circle"></i>
-                            Hinweis: Keine Eingabe liefert alle B&uuml;cher
+                            Hinweis: Keine Eingabe liefert alle Artikel
                         </div>
                     </div>
-
+                    
                     <div class="form-group row">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button class="btn btn-primary"><i class="fa fa-search"></i>
@@ -124,9 +88,6 @@ import {log} from '../../../shared/shared';
 })
 export default class SuchKriterien {
     bezeichnung: string = null;
-    lieferant: string = null;
-    schnulze: boolean = false;
-    scienceFiction: boolean = false;
 
     // Event Binding: <such-kriterien (waiting)="...">
     // siehe OutputMetadata in
@@ -140,18 +101,13 @@ export default class SuchKriterien {
 
     /**
      * Suche nach B&uuml;chern, die den spezfizierten Suchkriterien entsprechen
-     * @param suchkriterien: Suchkriterien vom Typ IArtikelForm
+     * @param suchkriterien: Suchkriterien vom Typ IBuchForm
      * @return false, um das durch den Button-Klick ausgel&ouml;ste Ereignis
      *         zu konsumieren.
      */
     @log
     find(): boolean {
-        const suchkriterien: any = {
-            bezeichnung: this.bezeichnung,
-            lieferant: this.lieferant,
-            schnulze: this.schnulze,
-            scienceFiction: this.scienceFiction
-        };
+        const suchkriterien: any = {bezeichnung: this.bezeichnung};
         console.log('suchkriterien=', suchkriterien);
 
         this.waiting.emit(true);

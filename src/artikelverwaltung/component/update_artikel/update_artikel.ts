@@ -22,12 +22,11 @@ import {RouteParams, CanActivate} from 'angular2/router';
 import ArtikelsService from '../../service/artikels_service';
 import Artikel from '../../model/artikel';
 import Stammdaten from './stammdaten';
-import Schlagwoerter from './schlagwoerter';
 import {isAdmin} from '../../../iam/iam';
 import {isString, ErrorMessage} from '../../../shared/shared';
 
 /**
- * Komponente f&uuml;r das Tag <code>update-artikel</code> mit Kindkomponenten
+ * Komponente f&uuml;r das Tag <code>update-buch</code> mit Kindkomponenten
  * f&uuml;r die folgenden Tags:
  * <ul>
  *  <li> <code>stammdaten</code>
@@ -36,40 +35,30 @@ import {isString, ErrorMessage} from '../../../shared/shared';
  */
 @Component({
     selector: 'update-artikel',
-    directives: [CORE_DIRECTIVES, Stammdaten, Schlagwoerter, ErrorMessage],
+    directives: [CORE_DIRECTIVES, Stammdaten, ErrorMessage],
     template: `
         <section *ngIf="artikel !== null">
             <h4>Artikel {{artikel._id}}:</h4>
-
-            <ul class="nav nav-tabs">
+           
+            <ul class="nav nav-tabs">            
                 <li class="nav-item">
-                    <a class="nav-link active" href="#stammdaten"
-                       data-toggle="tab">
-                        Stammdaten
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="artikel.schlagwoerter.length !== 0">
-                    <a class="nav-link" href="#schlagwoerter"
-                       data-toggle="tab">
-                        Schlagw&ouml;rter
-                    </a>
+                            <a class="nav-link active" href="#stammdaten"
+                            data-toggle="tab">
+                            Stammdaten
+                            </a>
                 </li>
             </ul>
-
-            <div class="tab-content">
+            
+             <div class="tab-content">
                 <div class="tab-pane fade in active" id="stammdaten">
                     <div class="m-t-1">
                         <stammdaten [artikel]="artikel"></stammdaten>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="schlagwoerter">
-                    <div class="m-t-1">
-                        <schlagwoerter [artikel]="artikel"></schlagwoerter>
-                    </div>
-                </div>
-            </div>
+             </div>
+                      
         </section>
-
+        
         <error-message [text]="errorMsg"></error-message>
     `
 })
@@ -81,31 +70,31 @@ export default class UpdateArtikel implements OnInit {
     errorMsg: string = null;
 
     constructor(
-        private _artikelsService: ArtikelsService,
+        private _artikelService: ArtikelsService,
         private _routeParams: RouteParams) {
         console.log('UpdateArtikel.constructor(): routeParams=', _routeParams);
     }
 
     /**
-     * Die Beobachtung starten, ob es ein zu aktualisierendes Artikel oder einen
+     * Die Beobachtung starten, ob es ein zu aktualisierendes Buch oder einen
      * Fehler gibt.
      */
     ngOnInit(): void {
         this._observeArtikel();
         this._observeError();
 
-        // Pfad-Parameter aus /updateArtikel/:id
+        // Pfad-Parameter aus /updateBuch/:id
         const id: string = this._routeParams.params['id'];
-        console.log(`UpdateArtikel.ngOnInit(): id=${id}`);
-        this._artikelsService.findById(id);
+        console.log(`UpdateArtikel.ngOnInit(): artikelId=${id}`);
+        this._artikelService.findById(id);
     }
 
     /**
-     * Beobachten, ob es ein zu aktualisierendes Artikel gibt.
+     * Beobachten, ob es ein zu aktualisierendes Buch gibt.
      */
     /* tslint:disable:align */
     private _observeArtikel(): void {
-        this._artikelsService.observeArtikel((artikel: Artikel) => {
+        this._artikelService.observeArtikel((artikel: Artikel) => {
             this.artikel = artikel;
             console.log('UpdateArtikel.artikel=', this.artikel);
         }, this);
@@ -115,7 +104,7 @@ export default class UpdateArtikel implements OnInit {
      * Beobachten, ob es einen Fehler gibt.
      */
     private _observeError(): void {
-        this._artikelsService.observeError((err: string | number) => {
+        this._artikelService.observeError((err: string | number) => {
             if (err === null) {
                 this.errorMsg = 'Ein Fehler ist aufgetreten.';
                 return;

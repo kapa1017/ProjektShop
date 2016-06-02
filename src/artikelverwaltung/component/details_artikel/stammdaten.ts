@@ -32,62 +32,37 @@ import Artikel from '../../model/artikel';
         <table class="table table-stripped table-hover table-responsive">
             <tbody>
                 <tr>
-                    <td><label>Titel</label></td>
-                    <td>{{buch.titel}}</td>
+                    <td><label>Bezeichnung</label></td>
+                    <td>{{artikel.bezeichnung}}</td>
+                </tr>
+                 <tr>
+                    <td><label>Ausgesondert</label></td>
+                    <td>{{artikel.ausgesondert}}</td>
                 </tr>
                 <tr>
-                    <td><label>Bewertung</label></td>
+                    <td><label>Rating</label></td>
                     <td>
-                        <span *ngFor="#r of buch.ratingArray">
+                        <span *ngFor="#r of artikel.ratingArray">
                             <i class="fa fa-star" style="color: yellow;"
                                *ngIf="r === true"></i>
                         </span>
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Art</label></td>
-                    <td>
-                        <span [ngSwitch]="buch.art">
-                            <span *ngSwitchWhen="'DRUCKAUSGABE'">Druckausgabe</span>
-                            <span *ngSwitchWhen="'KINDLE'">Kindle</span>
-                            <span *ngSwitchDefault>unbekannt</span>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label>Verlag</label></td>
-                    <td>
-                        <span [ngSwitch]="buch.verlag">
-                            <span *ngSwitchWhen="'OREILLY'">O'Reilly</span>
-                            <span *ngSwitchWhen="'PACKT'">Packt</span>
-                            <span *ngSwitchDefault>unbekannt</span>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label>Datum</label></td>
-                    <td>
-                        {{buch.datumFormatted}}<br/>
-                        {{buch.datumFromNow}}
-                    </td>
-                </tr>
-                <tr>
                     <td><label>Preis</label></td>
                     <!-- TODO 2 Nachkommastellen. Pipe "| number: '.2'" -->
-                    <td>{{buch.preis | currency: 'EUR': true}}</td>
+                    <td>{{artikel.preis | currency: 'EUR': true}}</td>
                 </tr>
-                <tr>
-                    <td><label>Rabatt</label></td>
-                    <!-- {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits} -->
-                    <!-- default: 1.0-3 -->
-                    <!-- node_modules\angular2\ts\src\...\number_pipe.ts -->
-                    <td>{{buch.rabatt | percent: '.2'}}</td>
-                </tr>
-                <tr>
-                    <td><label>Lieferbar?</label></td>
+                 <tr>
+                    <td><label>Kategorie</label></td>
                     <td>
-                        <input type="checkbox" checked="{{buch.lieferbar}}"
-                            disabled class="checkbox">
+                        <span [ngSwitch]="artikel.kategorie">
+                            <span *ngSwitchWhen="'BAD'">VERHEIRATET</span>
+                            <span *ngSwitchWhen="'BUERO'">LEDIG</span>
+                            <span *ngSwitchWhen="'DIELE'">GESCHIEDEN</span>
+                            <span *ngSwitchWhen="'ESSZIMMER'">VERWITWET</span>
+                            <span *ngSwitchDefault>KUECHE</span>
+                        </span>
                     </td>
                 </tr>
             </tbody>

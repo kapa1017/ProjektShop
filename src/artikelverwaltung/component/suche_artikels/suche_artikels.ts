@@ -22,7 +22,7 @@ import SuchErgebnis from './such_ergebnis';
 import {log} from '../../../shared/shared';
 
 /**
- * Komponente f&uuml;r das Tag <code>&lt;suche-artikels&gt;</code>, die aus den
+ * Komponente f&uuml;r das Tag <code>&lt;suche-buecher&gt;</code>, die aus den
  * Kindkomponenten f&uuml;r diese Tags besteht:
  * <ul>
  *  <li> <code>such-kriterien</code>

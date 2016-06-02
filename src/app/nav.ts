@@ -53,6 +53,11 @@ import {isAdmin} from '../iam/iam';
                                         </a>
                                     </li>
                                     <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['SucheArtikels']">
+                                            <i class="fa fa-search"></i> &nbsp; Artikelsuche
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isAdmin()">
                                         <a [routerLink]="['SucheBestellungenIds']">
                                             <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
                                         </a>

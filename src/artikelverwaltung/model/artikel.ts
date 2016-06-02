@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {RadioButtonState} from 'angular2/common';
+// import {RadioButtonState} from 'angular2/common';
 
-import {isBlank, isPresent} from '../../shared/shared';
+// import {isBlank, isPresent} from '../../shared/shared';
 
 /* tslint:disable:max-line-length */
 // https://github.com/urish/angular2-moment/blob/master/TimeAgoPipe.ts
@@ -25,9 +25,9 @@ import {isBlank, isPresent} from '../../shared/shared';
 // Moment exportiert den Namespace moment und die gleichnamige Function:
 // http://stackoverflow.com/questions/35254524/using-moment-js-in-angular-2-typescript-application#answer-35255412
 /* tslint:enable:max-line-length */
-import {Moment} from 'moment';
-import * as moment_ from 'moment';
-const moment: (date: string) => Moment = (<any>moment_)['default'];
+// import {Moment} from 'moment';
+// import * as moment_ from 'moment';
+// const moment: (date: string) => Moment = (<any>moment_)['default'];
 
 const MIN_RATING: number = 0;
 const MAX_RATING: number = 5;
@@ -36,12 +36,12 @@ const MAX_RATING: number = 5;
  * Gemeinsame Datenfelder unabh&auml;ngig, ob die Buchdaten von einem Server
  * (z.B. RESTful Web Service) oder von einem Formular kommen.
  */
+
 export interface IArtikelShared {
-    _id?: string;
+    id?: string;
     bezeichnung?: string;
-    lieferant?: 'EBAY'|'AMAZON';
-    datum: string;
-    lieferbar: boolean;
+    kategorie?: 'BAD'|'BUERO'|'DIELE'|'ESSZIMMER'|'KINDERZIMMER'|'KUECHE';
+    ausgesondert: boolean;
 }
 
 /**
@@ -55,10 +55,7 @@ export interface IArtikelShared {
  */
 export interface IArtikelServer extends IArtikelShared {
     preis: number;
-    rabatt: number;
     rating: number;
-    art: 'INLAND'|'AUSLAND';
-    schlagwoerter?: Array<string>;
 }
 
 /**
@@ -70,12 +67,7 @@ export interface IArtikelServer extends IArtikelShared {
  */
 export interface IArtikelForm extends IArtikelShared {
     preis: string;
-    rabatt: string;
     rating: string;
-    druckausgabe: RadioButtonState;
-    kindle: RadioButtonState;
-    schnulze?: boolean;
-    scienceFiction?: boolean;
 }
 
 /**
@@ -88,24 +80,17 @@ export default class Artikel {
     // wird i.a. nicht direkt aufgerufen, sondern Buch.fromServer oder
     // Buch.fromForm
     constructor(
-        public _id: string, public bezeichnung: string, public rating: number,
-        public art: 'INLAND'|'AUSLAND', public lieferant: 'EBAY'|'AMAZON',
-        public datum: Moment, public preis: number, public rabatt: number,
-        public lieferbar: boolean, public schlagwoerter: Array<string>) {
-        this._id = _id || null;
+        public id: string, public bezeichnung: string,
+        public kategorie:
+            'BAD'|'BUERO'|'DIELE'|'ESSZIMMER'|'KINDERZIMMER'|'KUECHE',
+        public ausgesondert: boolean, public preis: number,
+        public rating: number) {
+        this.id = id || null;
         this.bezeichnung = bezeichnung || null;
+        this.kategorie = kategorie || null;
+        this.ausgesondert = ausgesondert || null;
         this.rating = rating || null;
-        this.art = art || null;
-        this.lieferant = lieferant || null;
-        this.datum =
-            isPresent(datum) ? datum : moment(new Date().toISOString());
         this.preis = preis || null;
-        this.rabatt = rabatt || null;
-        this.lieferbar = lieferbar || null;
-        this.schlagwoerter =
-            isPresent(schlagwoerter) && schlagwoerter.length !== 0 ?
-            schlagwoerter :
-            [];
         for (let i: number = MIN_RATING; i < rating; i++) {
             this.ratingArray.push(true);
         }
@@ -121,11 +106,9 @@ export default class Artikel {
      */
     static fromServer(artikelServer: IArtikelServer): Artikel {
         const artikel: Artikel = new Artikel(
-            artikelServer._id, artikelServer.bezeichnung, artikelServer.rating,
-            artikelServer.art, artikelServer.lieferant,
-            moment(artikelServer.datum), artikelServer.preis,
-            artikelServer.rabatt, artikelServer.lieferbar,
-            artikelServer.schlagwoerter);
+            artikelServer.id, artikelServer.bezeichnung,
+            artikelServer.kategorie, artikelServer.ausgesondert,
+            artikelServer.preis, artikelServer.rating);
         console.log('Artikel.fromServer(): artikel=', artikel);
         return artikel;
     }
@@ -136,32 +119,14 @@ export default class Artikel {
      * @return Das initialisierte Buch-Objekt
      */
     static fromForm(artikelForm: IArtikelForm): Artikel {
-        const art: 'INLAND'|'AUSLAND' =
-            artikelForm.druckausgabe.checked ? 'INLAND' : 'AUSLAND';
-
-        const schlagwoerter: Array<string> = [];
-        if (artikelForm.schnulze) {
-            schlagwoerter.push('SCHNULZE');
-        }
-        if (artikelForm.scienceFiction) {
-            schlagwoerter.push('SCIENCE_FICTION');
-        }
         // preis und rabatt muss von string in number konvertiert werden
         const artikel: Artikel = new Artikel(
-            artikelForm._id, artikelForm.bezeichnung,
-            parseInt(artikelForm.rating, 10), art, artikelForm.lieferant, null,
-            parseInt(artikelForm.preis, 10),
-            parseInt(artikelForm.rabatt, 10) / 100, artikelForm.lieferbar,
-            schlagwoerter);
+            artikelForm.id, artikelForm.bezeichnung, artikelForm.kategorie,
+            artikelForm.ausgesondert, parseInt(artikelForm.preis, 10),
+            parseInt(artikelForm.rating, 10));
         console.log('Artikel.fromForm(): artikel=', artikel);
         return artikel;
     }
-
-    // http://momentjs.com
-    get datumFormatted(): string { return this.datum.format('Do MMM YYYY'); }
-
-    get datumFromNow(): string { return this.datum.fromNow(); }
-
     /**
      * Abfrage, ob im Buchbezeichnung der angegebene Teilstring enthalten ist. Dabei
      * wird nicht auf Gross-/Kleinschreibung geachtet.
@@ -170,8 +135,7 @@ export default class Artikel {
      *         false.
      */
     containsTitel(bezeichnung: string): boolean {
-        return this.bezeichnung.toLowerCase().includes(
-            bezeichnung.toLowerCase());
+        return this.bezeichnung.toLowerCase() === bezeichnung;
     }
 
     /**
@@ -197,9 +161,6 @@ export default class Artikel {
      * @param verlag der Name des Verlags
      * @return true, falls das Buch dem Verlag zugeordnet ist. Sonst false.
      */
-    hasVerlag(lieferant: string): boolean {
-        return this.lieferant === lieferant;
-    }
 
     /**
      * Aktualisierung der Stammdaten des Buch-Objekts.
@@ -211,47 +172,33 @@ export default class Artikel {
      * @param rabatt Der neue Rabatt
      */
     updateStammdaten(
-        bezeichnung: string, rating: number, art: 'INLAND'|'AUSLAND',
-        lieferant: 'EBAY'|'AMAZON', preis: number, rabatt: number): void {
+        bezeichnung: string,
+        kategorie: 'BAD'|'BUERO'|'DIELE'|'ESSZIMMER'|'KINDERZIMMER'|'KUECHE',
+        ausgesondert: boolean, preis: number, rating: number): void {
         this.bezeichnung = bezeichnung;
-        this.rating = rating;
-        this.art = art;
-        this.lieferant = lieferant;
+        this.kategorie = kategorie;
+        this.ausgesondert = ausgesondert;
         this.preis = preis;
-        this.rabatt = rabatt;
+        this.rating = rating;
     }
 
     /**
      * Abfrage, ob es zum Buch auch Schlagw&ouml;rter gibt.
      * @return true, falls es mindestens ein Schlagwort gibt. Sonst false.
      */
-    hasSchlagwoerter(): boolean { return this.schlagwoerter.length !== 0; }
+    hasKategorie(): boolean { return this.kategorie.length !== 0; }
+
 
     /**
      * Abfrage, ob es zum Buch das angegebene Schlagwort gibt.
      * @param schlagwort das zu &uuml;berpr&uuml;fende Schlagwort
      * @return true, falls es das Schlagwort gibt. Sonst false.
      */
-    hasSchlagwort(schlagwort: string): boolean {
-        return this.schlagwoerter.find((s: string) => s === schlagwort)
-            !== undefined;
-    }
-
     /**
      * Aktualisierung der Schlagw&ouml;rter des Buch-Objekts.
      * @param schnulze ist das Schlagwort SCHNULZE gesetzt
      * @param scienceFiction ist das Schlagwort SCIENCE_FICTION gesetzt
      */
-    updateSchlagwoerter(schnulze: boolean, scienceFiction: boolean): void {
-        this._resetSchlagwoerter();
-        if (schnulze) {
-            this._addSchlagwort('SCHNULZE');
-        }
-        if (scienceFiction) {
-            this._addSchlagwort('SCIENCE_FICTION');
-        }
-    }
-
     /**
      * Konvertierung des Buchobjektes in ein JSON-Objekt f&uuml;r den RESTful
      * Web Service.
@@ -259,27 +206,14 @@ export default class Artikel {
      */
     toJSON(): IArtikelServer {
         return {
-            _id: this._id,
+            id: this.id,
             bezeichnung: this.bezeichnung,
-            rating: this.rating,
-            art: this.art,
-            lieferant: this.lieferant,
-            datum: this.datum.format('YYYY-MM-DD'),
+            kategorie: this.kategorie,
+            ausgesondert: this.ausgesondert,
             preis: this.preis,
-            rabatt: this.rabatt,
-            lieferbar: this.lieferbar,
-            schlagwoerter: this.schlagwoerter
+            rating: this.rating
         };
     }
 
     toString(): string { return JSON.stringify(this, null, 2); }
-
-    _resetSchlagwoerter(): void { this.schlagwoerter = []; }
-
-    _addSchlagwort(schlagwort: string): void {
-        if (isBlank(this.schlagwoerter)) {
-            this.schlagwoerter = [];
-        }
-        this.schlagwoerter.push(schlagwort);
-    }
 }
