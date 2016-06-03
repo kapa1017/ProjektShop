@@ -52,16 +52,15 @@ import ARTIKELS_SERVICE_PROVIDER from
     // Provider fuer die Main-Komponente und ihre Kindkomponenten,
     // d.h. Singletons innerhalb dieses Teilbaums
     providers: [
-        ChartService, KundenService, KundeRegistrierungService,
+        ChartService, KundenService, KundeRegistrierungService, ArtikelsService,
         // KundenServiceMockServer,
         // ArtikelsService,
         // KundenServiceMockObjects,
-        KUNDEN_SERVICE_PROVIDER, KUNDEREGISTRIERUNG_SERVICE_PROVIDER
+        KUNDEN_SERVICE_PROVIDER, KUNDEREGISTRIERUNG_SERVICE_PROVIDER,
+        ARTIKELS_SERVICE_PROVIDER
         // ARTIKELS_SERVICE_PROVIDER
-        ChartService, KundenService,  // KundenServiceMockServer,
-        ArtikelsService,
+        // KundenServiceMockServer,
         // KundenServiceMockObjects,
-        KUNDEN_SERVICE_PROVIDER, ARTIKELS_SERVICE_PROVIDER
         // MOCK_SERVER_PROVIDER
         // MOCK_OBJECTS_PROVIDER
     ],
