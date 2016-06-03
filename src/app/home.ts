@@ -25,7 +25,7 @@ import {Component} from 'angular2/core';
     template: `
         <div class="jumbotron">
             <h1>Home</h1>
-            <h2>Die Heimat der SPA</h2>
+            <h2>Startseite des Shops</h2>
         </div>
     `
 })

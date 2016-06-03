@@ -41,7 +41,7 @@ import {log} from '../shared/shared';
                             [(ngModel)]="username">
                     </div>
                     <div class="col-sm-2">
-                        <button class="btn btn-primary" tabindex="3">
+                        <button class="btn btn-default" tabindex="3">
                         &nbsp; Login</button>
                     </div>
                 </div>
