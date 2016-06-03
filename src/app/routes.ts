@@ -24,6 +24,7 @@ import SucheKundebyBestellungId from '../kundenverwaltung/component/suche_kunde_
 import DetailsKunde from '../kundenverwaltung/component/details_kunde/details_kunde';
 import UpdateKunde from '../kundenverwaltung/component/update_kunde/update_kunde';
 import UpdatePrivatkunde from '../kundenverwaltung/component/update_kunde/update_kunde_privat';
+import KundeRegistrierung from '../registrierungsverwaltung/component/kunde_registrierung';
 /* tslint:disable:max-line-length */
 import BalkendiagrammBewertungen from '../kundenverwaltung/component/balkendiagramm_bewertungen/balkendiagramm_bewertungen';
 import LiniendiagrammBewertungen from '../kundenverwaltung/component/liniendiagramm_bewertungen/liniendiagramm_bewertungen';
@@ -78,6 +79,11 @@ const APP_ROUTES: any = {
         path: '/tortendiagramm',
         name: 'Tortendiagramm',
         component: TortendiagrammBewertungen
+    },
+    kundeRegistrierungDef: {
+        path: '/kundeRegistrieren',
+        name: 'KundeRegistrierung',
+        component: KundeRegistrierung
     },
     redirect: {path: '/', redirectTo: ['Home']}
 };

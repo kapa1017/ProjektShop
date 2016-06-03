@@ -80,6 +80,22 @@ import {isAdmin} from '../iam/iam';
                                 </ul>
                             </div>
                         </li>
+
+                        <li class="nav-item" *ngIf="isAdmin()">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Kunde registrieren
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li *ngIf="isAdmin()">
+                                        <a [routerLink]="['KundeRegistrierung']">
+                                            <i class="fa fa-search"></i> &nbsp; Kunde registrieren
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
 
                 <!-- DSL-Pfade durch @RouteConfig([{path: '/...', name: 'Home' ...} -->

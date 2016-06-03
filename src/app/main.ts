@@ -20,6 +20,7 @@ import {Component} from 'angular2/core';
 import {ChartService} from '../shared/shared';
 
 import KundenService from '../kundenverwaltung/service/kunden_service';
+import KundeRegistrierungService from '../registrierungsverwaltung/service/kundeRegistrierung_service';
 // import ArtikelsService from
 // '../artikelverwaltung/service/artikels_service';
 /*import KundenServiceMockServer from
@@ -28,6 +29,8 @@ import KundenService from '../kundenverwaltung/service/kunden_service';
 '../kundenverwaltung/service/mock/kunden_service_mock_objects';*/
 import KUNDEN_SERVICE_PROVIDER from
 '../kundenverwaltung/service/kunden_service';
+import KUNDEREGISTRIERUNG_SERVICE_PROVIDER from
+'../registrierungsverwaltung/service/kundeRegistrierung_service';
 /*import ARTIKELS_SERVICE_PROVIDER from
 '../artikelverwaltung/service/artikels_service';*/
 
@@ -45,10 +48,11 @@ import KUNDEN_SERVICE_PROVIDER from
     // Provider fuer die Main-Komponente und ihre Kindkomponenten,
     // d.h. Singletons innerhalb dieses Teilbaums
     providers: [
-        ChartService, KundenService,  // KundenServiceMockServer,
+        ChartService, KundenService, KundeRegistrierungService,
+        // KundenServiceMockServer,
         // ArtikelsService,
         // KundenServiceMockObjects,
-        KUNDEN_SERVICE_PROVIDER,
+        KUNDEN_SERVICE_PROVIDER, KUNDEREGISTRIERUNG_SERVICE_PROVIDER
         // ARTIKELS_SERVICE_PROVIDER
         // MOCK_SERVER_PROVIDER
         // MOCK_OBJECTS_PROVIDER
