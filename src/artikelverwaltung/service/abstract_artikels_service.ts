@@ -25,15 +25,15 @@ import {IArtikelForm} from '../model/artikel';
 abstract class AbstractArtikelsService {
     /**
      * {method} find
-     * Artikels suchen
+     * Buecher suchen
      * @param {Object} suchkriterien Die Suchkriterien
      */
     abstract find(suchkriterien: IArtikelForm): void;
 
     /**
      * {method} findById
-     * Ein Artikel anhand der ID suchen
-     * @param {string} id Die ID des gesuchten Artikels
+     * Ein Buch anhand der ID suchen
+     * @param {string} id Die ID des gesuchten Buchs
      * @param {Function} errorFn Eine Function fuer status !== OK
      */
     abstract findById(id: string): void;
@@ -46,18 +46,8 @@ abstract class AbstractArtikelsService {
         observerFn: (err: string|number) => void, thisArg: any): void;
 
     /**
-     * Ein neues Artikel anlegen
-     * @param neuesArtikel Das JSON-Objekt mit dem neuen Artikel
-     * @param successFn Die Callback-Function fuer den Erfolgsfall
-     * @param errorFn Die Callback-Function fuer den Fehlerfall
-     */
-    abstract save(
-        neuesArtikel: Artikel, successFn: (location: string) => void,
-        errorFn: (status: number, text: string) => void): void;
-
-    /**
-     * Ein vorhandenes Artikel aktualisieren
-     * @param artikel Das JSON-Objekt mit den aktualisierten Artikeldaten
+     * Ein vorhandenes Buch aktualisieren
+     * @param buch Das JSON-Objekt mit den aktualisierten Buchdaten
      * @param successFn Die Callback-Function fuer den Erfolgsfall
      * @param errorFn Die Callback-Function fuer den Fehlerfall
      */
@@ -66,35 +56,14 @@ abstract class AbstractArtikelsService {
         errorFn: (status: number, text: string) => void): void;
 
     /**
-     * Ein Artikel l&ouml;schen
-     * @param artikel Das JSON-Objekt mit dem zu loeschenden Artikel
+     * Ein Buch l&ouml;schen
+     * @param buch Das JSON-Objekt mit dem zu loeschenden Buch
      * @param successFn Die Callback-Function fuer den Erfolgsfall
      * @param errorFn Die Callback-Function fuer den Fehlerfall
      */
     abstract remove(
         artikel: Artikel, successFn: () => void,
         errorFn: (status: number) => void): void;
-
-    /**
-     * Ein Balkendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     */
-    abstract setBarChart(chartElement: HTMLCanvasElement): void;
-
-    /**
-     * Ein Liniendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     */
-    abstract setLinearChart(chartElement: HTMLCanvasElement): void;
-
-    /**
-     * Ein Tortendiagramm erzeugen und bei einem Tag <code>canvas</code>
-     * einf&uuml;gen.
-     * @param chartElement Das HTML-Element zum Tag <code>canvas</code>
-     */
-    abstract setPieChart(chartElement: HTMLCanvasElement): void;
 }
 
 export default AbstractArtikelsService;

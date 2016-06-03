@@ -19,10 +19,13 @@ import {RouteDefinition} from 'angular2/router';
 
 import Home from './home';
 import SucheKunden from '../kundenverwaltung/component/suche_kunden/suche_kunden';
+import SucheArtikels from '../artikelverwaltung/component/suche_artikels/suche_artikels';
 import SucheBestellungenIds from '../kundenverwaltung/component/suche_bestellungenids_from_kundeId/suche_bestellungenids';
 import SucheKundebyBestellungId from '../kundenverwaltung/component/suche_kunde_by_bestellungid/suche_kunde_by_bestellungid';
 import DetailsKunde from '../kundenverwaltung/component/details_kunde/details_kunde';
+import DetailsArtikel from '../artikelverwaltung/component/details_artikel/details_artikel';
 import UpdateKunde from '../kundenverwaltung/component/update_kunde/update_kunde';
+import UpdateArtikel from '../artikelverwaltung/component/update_artikel/update_artikel';
 import UpdatePrivatkunde from '../kundenverwaltung/component/update_kunde/update_kunde_privat';
 import KundeRegistrierung from '../registrierungsverwaltung/component/kunde_registrierung';
 /* tslint:disable:max-line-length */
@@ -43,6 +46,11 @@ const APP_ROUTES: any = {
     // home: {path: '/', name: 'Home', component: Home},
     sucheKundenDef:
         {path: '/sucheKunden', name: 'SucheKunden', component: SucheKunden},
+    sucheArtikelsDef: {
+        path: '/sucheArtikels',
+        name: 'SucheArtikels',
+        component: SucheArtikels
+    },
     sucheBestellungenIdsDef: {
         path: '/sucheBestellungenIds',
         name: 'SucheBestellungenIds',
@@ -58,8 +66,18 @@ const APP_ROUTES: any = {
         name: 'DetailsKunde',
         component: DetailsKunde
     },
+    detailsArtikelDef: {
+        path: '/detailsArtikel/:id',
+        name: 'DetailsArtikel',
+        component: DetailsArtikel
+    },
     updateKundeDef:
         {path: '/updateKunde/:id', name: 'UpdateKunde', component: UpdateKunde},
+    updateArtikelDef: {
+        path: '/updateArtikel/:id',
+        name: 'UpdateArtikel',
+        component: UpdateArtikel
+    },
     updatePrivatekundeDef: {
         path: '/updatePrivatkunde/:id',
         name: 'UpdatePrivatkunde',

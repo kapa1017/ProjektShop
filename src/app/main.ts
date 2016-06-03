@@ -23,6 +23,8 @@ import KundenService from '../kundenverwaltung/service/kunden_service';
 import KundeRegistrierungService from '../registrierungsverwaltung/service/kundeRegistrierung_service';
 // import ArtikelsService from
 // '../artikelverwaltung/service/artikels_service';
+import ArtikelsService from
+'../artikelverwaltung/service/artikels_service';
 /*import KundenServiceMockServer from
 '../kundenverwaltung/service/mock/kunden_service_mock_server';*/
 /* import KundenServiceMockObjects from
@@ -33,6 +35,8 @@ import KUNDEREGISTRIERUNG_SERVICE_PROVIDER from
 '../registrierungsverwaltung/service/kundeRegistrierung_service';
 /*import ARTIKELS_SERVICE_PROVIDER from
 '../artikelverwaltung/service/artikels_service';*/
+import ARTIKELS_SERVICE_PROVIDER from
+'../artikelverwaltung/service/artikels_service';
 
 // import {MOCK_SERVER_PROVIDER}
 // from '../kundenverwaltung/service/mock/kunden_service_mock_server';
@@ -54,6 +58,10 @@ import KUNDEREGISTRIERUNG_SERVICE_PROVIDER from
         // KundenServiceMockObjects,
         KUNDEN_SERVICE_PROVIDER, KUNDEREGISTRIERUNG_SERVICE_PROVIDER
         // ARTIKELS_SERVICE_PROVIDER
+        ChartService, KundenService,  // KundenServiceMockServer,
+        ArtikelsService,
+        // KundenServiceMockObjects,
+        KUNDEN_SERVICE_PROVIDER, ARTIKELS_SERVICE_PROVIDER
         // MOCK_SERVER_PROVIDER
         // MOCK_OBJECTS_PROVIDER
     ],

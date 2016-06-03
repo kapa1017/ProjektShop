@@ -38,7 +38,7 @@ import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
     template: `
         <section>
             <waiting [activated]="waiting"></waiting>
-            <gefundene-artikels [artikels]="artikels"></gefundene-artikels>
+            <gefundene-artikels [artikel]="artikels"></gefundene-artikels>
             <error-message [text]="errorMsg"></error-message>
         <section>
     `
@@ -73,9 +73,9 @@ export default class SuchErgebnis implements OnInit {
     }
 
     /**
-     * Methode, um den injizierten <code>ArtikelsService</code> zu beobachten,
+     * Methode, um den injizierten <code>BuecherService</code> zu beobachten,
      * ob es gefundene bzw. darzustellende B&uuml;cher gibt, die in der
-     * Kindkomponente f&uuml;r das Tag <code>gefundene-artikels</code>
+     * Kindkomponente f&uuml;r das Tag <code>gefundene-buecher</code>
      * dargestellt werden. Diese private Methode wird in der Methode
      * <code>ngOnInit</code> aufgerufen.
      */
@@ -93,7 +93,7 @@ export default class SuchErgebnis implements OnInit {
     }
 
     /**
-     * Methode, um den injizierten <code>ArtikelsService</code> zu beobachten,
+     * Methode, um den injizierten <code>BuecherService</code> zu beobachten,
      * ob es bei der Suche Fehler gibt, die in der Kindkomponente f&uuml;r das
      * Tag <code>error-message</code> dargestellt werden. Diese private Methode
      * wird in der Methode <code>ngOnInit</code> aufgerufen.
@@ -116,7 +116,7 @@ export default class SuchErgebnis implements OnInit {
 
             switch (err) {
                 case 404:
-                    this.errorMsg = 'Keine Artikel gefunden.';
+                    this.errorMsg = 'Keine Artikels gefunden.';
                     break;
                 default:
                     this.errorMsg = 'Ein Fehler ist aufgetreten.';
