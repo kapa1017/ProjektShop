@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "noEmitHelpers": false,
     "emitDecoratorMetadata": "true",
-    "experimentalDecorators": "true",
+    "experimentalDecorators": true,
     "noImplicitAny": true,
     "preserveConstEnums": "true",
     "suppressExcessPropertyErrors": "true",
