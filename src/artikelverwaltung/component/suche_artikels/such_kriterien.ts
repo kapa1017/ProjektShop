@@ -42,7 +42,7 @@ import {log} from '../../../shared/shared';
                         * Eingaben werden validiert
                 -->
                 <!-- Template-Syntax:
-                     (submit)="find()"   fuer Output = Event Binding
+                     (submit)="findByBezeichnung()"   fuer Output = Event Binding
                                          d.h. Ereignis submit an find() anbinden
                                          oder on-submit="find"
                      Definition von Attributnamen gemaess HTML: Attribute names
@@ -55,14 +55,14 @@ import {log} from '../../../shared/shared';
                      form-group, row, form-control-label, btn, ...
                      http://v4-alpha.getbootstrap.com/components/forms -->
 
-                <form (submit)="find()" role="form">
+                <form (submit)="findByBezeichnung()" role="form">
                     <div class="form-group row">
                         <label for="bezeichnungInput"
                                class="col-sm-2 form-control-label">Bezeichnung</label>
                         <div class="col-sm-10">
                             <input id="bezeichnungInput"
                                 type="search"
-                                placeholder="Den Artikelnamen oder einen Teil davon eingeben"
+                                placeholder="Die Artikel-ID eingeben: "
                                 class="form-control"
                                 [(ngModel)]="bezeichnung">
                         </div>
@@ -106,7 +106,7 @@ export default class SuchKriterien {
      *         zu konsumieren.
      */
     @log
-    find(): boolean {
+    findByBezeichnung(): boolean {
         const suchkriterien: any = {bezeichnung: this.bezeichnung};
         console.log('suchkriterien=', suchkriterien);
 
