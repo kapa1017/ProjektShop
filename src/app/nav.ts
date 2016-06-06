@@ -27,12 +27,12 @@ import {isAdmin} from '../iam/iam';
     selector: 'app-nav',
     // Internationalisierung durch z.B. https://github.com/ocombe/ng2-translate
     template: `
-        <nav class="navbar navbar-dark bg-inverse" >
+        <nav class="navbar navbar-dark bg-inverse" style="border-radius:0px;">
             <!-- http://v4-alpha.getbootstrap.com/components/list-group/#linked-items -->
             <!-- Alternative CSS-Klassen fuer list-group: navs, nav-item, nav-link -->
             <!-- http://v4-alpha.getbootstrap.com/components/navs -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">NavBar</a>
+                    <a class="navbar-brand" href="#">Shop</a>
                 </div>
                     <ul class="nav navbar-nav" >
                         <li class="nav-item">
@@ -40,49 +40,45 @@ import {isAdmin} from '../iam/iam';
                                 <i class="fa fa-home"></i> &nbsp; Home
                             </a>
                         </li>
+                        <li class="nav-item dropdown" *ngIf="isAdmin()">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                            aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> &nbsp; Kunde
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" *ngIf="isAdmin()" [routerLink]="['SucheKunden']">
+                                    <i class="fa fa-search"></i> &nbsp; Suche Kunden
+                                </a>
+                                <a class="dropdown-item" *ngIf="isAdmin()" [routerLink]="['SucheBestellungenIds']">
+                                    <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
+                                </a>
+                                <a class="dropdown-item" *ngIf="isAdmin()" [routerLink]="['SucheKundebyBestellungId']">
+                                    <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
+                                </a>
+                                <a class="dropdown-item" *ngIf="isAdmin()" [routerLink]="['Balkendiagramm']">
+                                    <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm Bestellungen
+                                </a>
+                                <a class="dropdown-item" *ngIf="isAdmin()" [routerLink]="['Liniendiagramm']">
+                                    <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm Bestellungen
+                                </a>
+                                <a class="dropdown-item" *ngIf="isAdmin()" [routerLink]="['Tortendiagramm']">
+                                    <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm Bestellungen
+                                </a>
+                            </div>
+                        </li>
                         <li class="nav-item" *ngIf="isAdmin()">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Kunde
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['SucheKunden']">
-                                            <i class="fa fa-search"></i> &nbsp; Suche Kunden
-                                        </a>
-                                    </li>
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['SucheArtikels']">
-                                            <i class="fa fa-search"></i> &nbsp; Artikelsuche
-                                        </a>
-                                    </li>
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['SucheBestellungenIds']">
-                                            <i class="fa fa-search"></i> &nbsp; Suche BestellungenIds
-                                        </a>
-                                    </li>
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['SucheKundebyBestellungId']">
-                                            <i class="fa fa-search"></i> &nbsp; Suche Kunde über BestellungId
-                                        </a>
-                                    </li>
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['Balkendiagramm']">
-                                            <i class="fa fa-bar-chart"></i> &nbsp; Balkendiagramm Bestellungen
-                                        </a>
-                                    </li>
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['Liniendiagramm']">
-                                            <i class="fa fa-line-chart"></i> &nbsp; Liniendiagramm Bestellungen
-                                        </a>
-                                    </li>
-                                    <li *ngIf="isAdmin()">
-                                        <a [routerLink]="['Tortendiagramm']">
-                                            <i class="fa fa-pie-chart"></i> &nbsp; Tortendiagramm Bestellungen
-                                        </a>
-                                    </li>
-                                </ul>
+                            <a class="nav-link" [routerLink]="['KundeRegistrierung']">
+                                <i class="fa fa-plus-square"></i> &nbsp; Kunde registrieren
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                                aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-book"></i> &nbsp; Artikel
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" [routerLink]="['SucheArtikels']">
+                                    <i class="fa fa-search"></i> &nbsp; Artikelsuche
+                                </a>
                             </div>
                         </li>
                     </ul>

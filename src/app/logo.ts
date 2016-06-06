@@ -24,7 +24,7 @@ import {Component} from 'angular2/core';
     selector: 'logo',
     template: `
         <a [routerLink]="['Home']">
-            <img src="/img/hslot.png" alt="Logo" height="120" width="120">
+            <img src="/img/hslot.png" alt="Logo" height="90" width="90">
         </a>
     `
 })

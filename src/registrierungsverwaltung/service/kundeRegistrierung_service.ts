@@ -1,5 +1,5 @@
 /* tslint:disable:max-line-length */
-import {Inject} from 'angular2/core';
+import {Inject, provide, Provider} from 'angular2/core';
 import {Http, Response, Headers, RequestOptionsArgs} from 'angular2/http';
 // Moment exportiert den Namespace moment und die gleichnamige Function:
 // http://stackoverflow.com/questions/35254524/using-moment-js-in-angular-2-typescript-application#answer-35255412
@@ -63,3 +63,6 @@ export default class KundeRegistrierungService {
         this._http.post(uri, body, options).subscribe(nextFn, errorFnPost);
     }
 }
+
+export const KUNDEREGISTRIERUNG_SERVICE_PROVIDER: Provider =
+    provide(KundeRegistrierungService, {useClass: KundeRegistrierungService});
