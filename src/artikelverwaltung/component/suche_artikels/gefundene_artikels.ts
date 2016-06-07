@@ -61,23 +61,23 @@ import {log} from '../../../shared/shared';
                     <tbody>
                         <!-- Template Binding: ngFor -->
                         <!-- Event-Binding: statt (click) auch on-click -->
-                        <tr *ngFor="#k of artikels; #i = index" (click)="details(k)">
+                        <tr *ngFor="#a of artikels; #i = index" (click)="details(a)">
                             <td>{{i + 1}}</td>
-                            <td>{{k.id}}</td>
-                            <td>{{k.bezeichnung}}</td>
-                            <td>{{k.rating}}</td>
-                            <td>{{k.preis}}</td>
+                            <td>{{a.id}}</td>
+                            <td>{{a.bezeichnung}}</td>
+                            <td>{{a.rating}}</td>
+                            <td>{{a.preis}}</td>
                             <td>
                                 <!-- Pfad /detailsArtikel/:id, @RouteConfig in app.ts -->
                                 <!-- modaler Dialog als Alternative: -->
                                 <!-- http://v4-alpha.getbootstrap.com/components/modal -->
-                                <a [routerLink]="['DetailsArtikel', {'id': k.id}]"
+                                <a [routerLink]="['DetailsArtikel', {'id': a.id}]"
                                    data-toggle="tooltip" title="Details anzeigen">
                                     <i class="fa fa-search-plus"></i>
                                 </a>
                             </td>
                             <td>
-                                <a (click)="remove(k)" data-toggle="tooltip"
+                                <a (click)="remove(a)" data-toggle="tooltip"
                                    title="Entfernen">
                                     <i class="fa fa-remove"></i>
                                 </a>

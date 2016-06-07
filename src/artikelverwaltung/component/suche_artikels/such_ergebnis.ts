@@ -38,7 +38,7 @@ import {Waiting, ErrorMessage, isString} from '../../../shared/shared';
     template: `
         <section>
             <waiting [activated]="waiting"></waiting>
-            <gefundene-artikels [artikel]="artikels"></gefundene-artikels>
+            <gefundene-artikels [artikels]="artikels"></gefundene-artikels>
             <error-message [text]="errorMsg"></error-message>
         <section>
     `
