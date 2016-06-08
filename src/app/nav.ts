@@ -65,11 +65,13 @@ import {isAdmin} from '../iam/iam';
                                 </a>
                             </div>
                         </li>
+                        <!--
                         <li class="nav-item" *ngIf="isAdmin()">
                             <a class="nav-link" [routerLink]="['KundeRegistrierung']">
                                 <i class="fa fa-plus-square"></i> &nbsp; Kunde registrieren
                             </a>
                         </li>
+                        -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                 aria-haspopup="true" aria-expanded="false">

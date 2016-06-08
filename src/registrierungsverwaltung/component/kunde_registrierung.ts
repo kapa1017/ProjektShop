@@ -20,6 +20,8 @@ import {Component, OnInit} from 'angular2/core';
 import {Router, CanActivate} from 'angular2/router';
 import KundeRegistrierungService from '../service/kundeRegistrierung_service';
 import Kunde from '../../kundenverwaltung/model/kunde';
+// import Identity from '../../kundenverwaltung/model/identity';
+// import Adresse from '../../kundenverwaltung/model/adresse';
 import KundeValidator from '../../kundenverwaltung/component/validator/kunde_validator';
 import APP_ROUTES from '../../app/routes';
 import {isAdmin} from '../../iam/iam';
@@ -130,6 +132,9 @@ export default class KundeRegistrierung implements OnInit {
             return false;
         }
 
+        // const neueAdresse: Adresse = Adresse.fromForm(this.form.value);
+        // const neueIdentity: Identity = Identity.fromForm(this.form.value);
+        // console.log('neueIdentity=', neueIdentity);
         const neuerKunde: Kunde = Kunde.fromForm(this.form.value);
         console.log('neuerKunde=', neuerKunde);
 

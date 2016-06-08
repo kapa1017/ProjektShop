@@ -29,26 +29,10 @@ import {Moment} from 'moment';
 import * as moment_ from 'moment';
 const moment: (date: string) => Moment = (<any>moment_)['default'];
 // import {IIdentityShared} from './identity';
-// import Identity from './identity';
+import Identity from './identity';
 
 const MIN_KATEGORIE: number = 0;
 const MAX_KATEGORIE: number = 5;
-
-export interface IAdresse {
-    plz: string;
-    ort: string;
-    strasse: string;
-    hausnr: string;
-}
-
-export interface IIdentity {
-    loginname: string;
-    enabled: boolean;
-    nachname: string;
-    vorname?: string;
-    email: string;
-    adresse: IAdresse;
-}
 
 /**
  * Gemeinsame Datenfelder unabh&auml;ngig, ob die Kundendaten von einem Server
@@ -56,7 +40,7 @@ export interface IIdentity {
  */
 export interface IKundeShared {
     id?: string;
-    identity: IIdentity;
+    identity: Identity;
     newsletter?: boolean;
     agbAkzeptiert: boolean;
     seit: string;
@@ -113,7 +97,7 @@ export default class Kunde {
     // wird i.a. nicht direkt aufgerufen, sondern Kunde.fromServer oder
     // Kunde.fromForm
     constructor(
-        public id: string, public identity: IIdentity, public kategorie: number,
+        public id: string, public identity: Identity, public kategorie: number,
         public rabatt: number, public umsatz: number, public seit: Moment,
         public newsletter: boolean, public agbAkzeptiert: boolean,
         public bemerkungen: string, public bestellungenUri: string,
@@ -155,7 +139,6 @@ export default class Kunde {
             kundeServer.bemerkungen, kundeServer.bestellungenUri,
             kundeServer.geschlecht, kundeServer.typ, kundeServer.familienstand,
             kundeServer.hobbys);
-        // kundeServer.familienstand
         console.log('Kunde.fromServer(): kunde=', kunde);
         return kunde;
     }
@@ -185,11 +168,8 @@ export default class Kunde {
             null, kundeForm.newsletter, kundeForm.agbAkzeptiert,
             kundeForm.bemerkungen, kundeForm.bestellungenUri,
             kundeForm.geschlecht, typ, null, hobbys);
-        // familienstand
         console.log('Kunde.fromForm(): kunde=', kunde);
         return kunde;
-        // kundeForm.loginname, kundeForm.kategorie,kundeForm.newsletter,
-        // kundeForm.agbAkzeptiert
     }
     // http://momentjs.com
     get datumFormatted(): string { return this.seit.format('Do MMM YYYY'); }
